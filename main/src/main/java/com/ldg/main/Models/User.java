@@ -2,27 +2,27 @@ package com.ldg.main.Models;
 
 public class User {
     private long ID;
-    private long Picture_id;
-    private String Name;
+    private long pictureID;
+    private String name;
     private String password;
     private String username;
-    private String Lastname;
-    private int Type=0;
-    private String Path="";
+    private String lastname;
+    private int type=0;
+    private String path="";
 
     public User()
     {
 
     }
 
-    public User(long ID,long Picture_id,String Name,String Lastname,int Type,String Path,String password,String username)
+    public User(long ID,long pictureID,String name,String lastname,int type,String path,String password,String username)
     {
         this.ID=ID;
-        this.Picture_id=Picture_id;
-        this.Name=Name;
-        this.Lastname=Lastname;
-        this.Type=Type;
-        this.Path=Path;
+        this.pictureID=pictureID;
+        this.name=name;
+        this.lastname=lastname;
+        this.type=type;
+        this.path=path;
         this.password=password;
         this.username=username;
     }
@@ -37,44 +37,54 @@ public class User {
         return this.ID;
     }
 
-    public void setPictureID(long picture_id)
+    public void setPictureID(long pictureID)
     {
-        this.Picture_id=picture_id;
+        this.pictureID=pictureID;
     }
 
     public long getPictureID()
     {
-        return this.Picture_id;
+        return this.pictureID;
     }
 
-    public void setName(String Name)
+    public void setName(String name)
     {
-        this.Name=Name;
+        this.name=name;
     }
 
     public String getName()
     {
-        return this.Name;
+        return this.name;
     }
 
-    public void setType(int Type)
+    public void setLastname(String lastname)
     {
-        this.Type=Type;
+        this.lastname=lastname;
+    }
+
+    public String getLastname()
+    {
+        return this.lastname;
+    }
+
+    public void setType(int type)
+    {
+        this.type=type;
     }
 
     public int getType()
     {
-        return this.Type;
+        return this.type;
     }
 
-    public void setPath(String Path)
+    public void setPath(String path)
     {
-        this.Path=Path;
+        this.path=path;
     }
 
     public String getPath()
     {
-        return this.Path;
+        return this.path;
     }
 
     public String getPassword()
