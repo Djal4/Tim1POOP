@@ -18,4 +18,43 @@ public class Ad {
 
     @Column(name = "owner_id")
     private int ownerId;
+
+    public Ad(){
+        
+    }
+
+    public Ad(Integer id, int flatId, int adCategoryId, int ownerId) {
+        this.id = id;
+        this.flatId = flatId;
+        this.adCategoryId = adCategoryId;
+        this.ownerId = ownerId;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setFlatId(int flatId) {
+        this.flatId = flatId;
+    }
+
+    public void setAdCategoryId(int adCategoryId) {
+        this.adCategoryId = adCategoryId;
+    }
+
+    public void setOwnerId(int ownerId) {
+        this.ownerId = ownerId;
+    }
+
+    public int getFlatId() {
+        return flatId;
+    }
+
+    public int getAdCategoryId() {
+        return adCategoryId;
+    }
+
+    public int getOwnerId() {
+        return ownerId;
+    }
 }
