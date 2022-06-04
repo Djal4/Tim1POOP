@@ -7,4 +7,5 @@ import com.ldg.main.Models.User;
 
 @Repository
 public interface UserRepository extends JpaRepository<User,Integer> {
+    //public void delete(Integer ID);
 }

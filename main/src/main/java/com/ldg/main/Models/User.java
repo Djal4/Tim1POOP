@@ -1,13 +1,34 @@
 package com.ldg.main.Models;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name="users")
 public class User {
+    @Id
+    @GeneratedValue
+    @Column(name="id")
     private long ID;
+
+    @Column(name="image_id")
     private long pictureID;
+
+    @Column(name="first_name")
     private String name;
+
+    @Column(name="password")
     private String password;
+
+    @Column(name="username")
     private String username;
+
+    @Column(name="last_name")
     private String lastname;
+
+    @Column(name="role_id")
     private int type=0;
+
+    @Column(name="image_path")
     private String path="";
 
     public User()
