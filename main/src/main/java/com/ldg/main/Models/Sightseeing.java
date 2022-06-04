@@ -23,7 +23,7 @@ public class Sightseeing {
     @Column(name = "accepted")
     private boolean accepted;
 
-    @Column(name = "accepted")
+    @Column(name = "time")
     private LocalDateTime time;
 
     @Column(name = "mark")
