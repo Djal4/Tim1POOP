@@ -7,10 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
+import com.ldg.main.Services.UserService;
 import com.ldg.main.Models.User;
 import com.ldg.main.Repository.UserRepository;
 
@@ -20,6 +22,8 @@ public class UserController {
     
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private UserService userService;
     private Optional<User> user;
 
     @GetMapping
@@ -30,7 +34,7 @@ public class UserController {
     }
 
     @GetMapping("/{user}")
-    public User show(@PathVariable(value="user") int ID)
+    public User show(@PathVariable(value="user") Long ID)
     {
         user=userRepository.findById(ID);
         if(user.isPresent())
@@ -40,16 +44,22 @@ public class UserController {
     }
 
     @PutMapping("/{user}")
-    public User update(@PathVariable(value="user") int ID)
+    public User update(@PathVariable(value="user") Long ID)
     {
         user=userRepository.findById(ID);
         return new User();
     }
 
-    @DeleteMapping("/{user}")
-    public boolean destroy(@PathVariable(value="user") int id)
+    @PostMapping
+    public User store(@RequestBody User user)
     {
-        userRepository.delete(this.show(id));
+        return userService.saveUser(user);
+    }
+
+    @DeleteMapping("/{user}")
+    public boolean destroy(@PathVariable(value="user") Long ID)
+    {
+        userRepository.delete(this.show(ID));
         return true;
     }
 }

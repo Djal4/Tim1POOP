@@ -13,8 +13,8 @@ public class User {
     @Column(name="image_id")
     private long pictureID;
 
-    @Column(name="first_name")
-    private String name;
+    @Column(name="firstname")
+    private String firstname;
 
     @Column(name="password")
     private String password;
@@ -22,11 +22,11 @@ public class User {
     @Column(name="username")
     private String username;
 
-    @Column(name="last_name")
+    @Column(name="lastname")
     private String lastname;
 
     @Column(name="role_id")
-    private int type=0;
+    private int role_id=0;
 
     @Column(name="image_path")
     private String path="";
@@ -36,13 +36,13 @@ public class User {
 
     }
 
-    public User(long ID,long pictureID,String name,String lastname,int type,String path,String password,String username)
+    public User(long ID,long pictureID,String firstname,String lastname,int role_id,String path,String password,String username)
     {
         this.ID=ID;
         this.pictureID=pictureID;
-        this.name=name;
+        this.firstname=firstname;
         this.lastname=lastname;
-        this.type=type;
+        this.role_id=role_id;
         this.path=path;
         this.password=password;
         this.username=username;
@@ -52,7 +52,7 @@ public class User {
     {
         this.ID=id;
     }
-
+    
     public long getID()
     {
         return this.ID;
@@ -68,14 +68,14 @@ public class User {
         return this.pictureID;
     }
 
-    public void setName(String name)
+    public void setFirstame(String firstname)
     {
-        this.name=name;
+        this.firstname=firstname;
     }
 
-    public String getName()
+    public String getFirstname()
     {
-        return this.name;
+        return this.firstname;
     }
 
     public void setLastname(String lastname)
@@ -88,14 +88,14 @@ public class User {
         return this.lastname;
     }
 
-    public void setType(int type)
+    public void setRoleID(int role_id)
     {
-        this.type=type;
+        this.role_id=role_id;
     }
 
-    public int getType()
+    public int getRoleID()
     {
-        return this.type;
+        return this.role_id;
     }
 
     public void setPath(String path)

@@ -127,8 +127,8 @@ CREATE TABLE `sightseeing` (
 
 CREATE TABLE `users` (
   `id` int(11) NOT NULL,
-  `first_name` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
-  `last_name` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
+  `firstname` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
+  `lastname` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
   `image_id` int(11) NOT NULL,
   `image_path` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
   `role_id` int(11) NOT NULL,

@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import com.ldg.main.Models.User;
 
 @Repository
-public interface UserRepository extends JpaRepository<User,Integer> {
+public interface UserRepository extends JpaRepository<User,Long> {
     //public void delete(Integer ID);
 }
