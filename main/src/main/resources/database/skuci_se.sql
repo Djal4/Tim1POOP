@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 05, 2022 at 02:44 PM
+-- Generation Time: Jun 05, 2022 at 04:36 PM
 -- Server version: 10.4.21-MariaDB
 -- PHP Version: 8.0.12
 
@@ -21,6 +21,19 @@ SET time_zone = "+00:00";
 -- Database: `skuci_se`
 --
 
+DELIMITER $$
+--
+-- Procedures
+--
+CREATE DEFINER=`root`@`localhost` PROCEDURE `findByOwnerId` (IN `id` INT)  BEGIN
+SELECT * FROM sightseeing s WHERE EXISTS
+(
+    SELECT * FROM advertisments a WHERE s.advertisment_id=a.id AND a.owner_id = id
+);
+END$$
+
+DELIMITER ;
+
 -- --------------------------------------------------------
 
 --
@@ -31,11 +44,18 @@ CREATE TABLE `advertisments` (
   `id` int(11) NOT NULL,
   `advertisment_category_id` int(11) NOT NULL,
   `owner_id` int(11) NOT NULL,
-  `description` text COLLATE utf8_unicode_ci NOT NULL,
+  `description` text COLLATE utf8_unicode_ci DEFAULT NULL,
   `location_id` int(11) NOT NULL,
   `price` float NOT NULL,
   `area` float NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Dumping data for table `advertisments`
+--
+
+INSERT INTO `advertisments` (`id`, `advertisment_category_id`, `owner_id`, `description`, `location_id`, `price`, `area`) VALUES
+(2, 1, 1, 'opis', 1, 1000, 50);
 
 -- --------------------------------------------------------
 
@@ -45,8 +65,16 @@ CREATE TABLE `advertisments` (
 
 CREATE TABLE `advertisment_categories` (
   `id` int(11) NOT NULL,
-  `title` int(11) NOT NULL
+  `title` varchar(30) COLLATE utf8_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Dumping data for table `advertisment_categories`
+--
+
+INSERT INTO `advertisment_categories` (`id`, `title`) VALUES
+(1, 'RENT'),
+(2, 'SELL');
 
 -- --------------------------------------------------------
 
@@ -90,6 +118,13 @@ CREATE TABLE `locations` (
   `country` varchar(30) COLLATE utf8_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+--
+-- Dumping data for table `locations`
+--
+
+INSERT INTO `locations` (`id`, `city`, `street`, `flat_number`, `country`) VALUES
+(1, 'Kragujevac', 'Ulica', '11/10', 'Srbija');
+
 -- --------------------------------------------------------
 
 --
@@ -121,8 +156,15 @@ CREATE TABLE `sightseeing` (
   `advertisment_id` int(11) NOT NULL,
   `accepted` tinyint(1) NOT NULL DEFAULT 0,
   `time` datetime NOT NULL DEFAULT current_timestamp(),
-  `mark` float NOT NULL
+  `mark` float DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Dumping data for table `sightseeing`
+--
+
+INSERT INTO `sightseeing` (`id`, `user_id`, `advertisment_id`, `accepted`, `time`, `mark`) VALUES
+(1, 1, 2, 0, '2022-06-05 16:12:07', 0);
 
 -- --------------------------------------------------------
 
@@ -210,19 +252,19 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `advertisments`
 --
 ALTER TABLE `advertisments`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `advertisment_categories`
 --
 ALTER TABLE `advertisment_categories`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `locations`
 --
 ALTER TABLE `locations`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `roles`
@@ -234,7 +276,7 @@ ALTER TABLE `roles`
 -- AUTO_INCREMENT for table `sightseeing`
 --
 ALTER TABLE `sightseeing`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `users`
