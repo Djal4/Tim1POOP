@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.ldg.main.Models.Sightseeing;
 
-public interface SightseeingRepository extends JpaRepository<Sightseeing,Integer> {
+public interface SightseeingRepository extends JpaRepository<Sightseeing,Long> {
    // @Query(name ="SELECT * FROM sightseeing s WHERE EXISTS( SELECT * FROM advertisment a WHERE s.advertisment_id=a.id AND s.owner_id=?1)",nativeQuery = true)
     //List<Sightseeing> findByOwnerId(int id);
 }
