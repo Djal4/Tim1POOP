@@ -10,32 +10,36 @@ public class Ad {
     @Column(name = "id")
     private Integer id;
 
-    @Column(name = "flat_id")
-    private int flatId;
-
     @Column(name = "advertisment_category_id")
     private int adCategoryId;
 
     @Column(name = "owner_id")
     private int ownerId;
 
+    @Column(name = "location_id")
+    private int locationId;
+
+    @Column(name="area")
+    private float area;
+
+    @Column(name = "price")
+    private float price;
+
+    @Column(name = "description")
+    private String description;
+
     public Ad(){
         
     }
 
-    public Ad(Integer id, int flatId, int adCategoryId, int ownerId) {
+    public Ad(Integer id, int adCategoryId, int ownerId) {
         this.id = id;
-        this.flatId = flatId;
         this.adCategoryId = adCategoryId;
         this.ownerId = ownerId;
     }
 
     public Integer getId() {
         return id;
-    }
-
-    public void setFlatId(int flatId) {
-        this.flatId = flatId;
     }
 
     public void setAdCategoryId(int adCategoryId) {
@@ -46,15 +50,47 @@ public class Ad {
         this.ownerId = ownerId;
     }
 
-    public int getFlatId() {
-        return flatId;
-    }
-
     public int getAdCategoryId() {
         return adCategoryId;
     }
 
     public int getOwnerId() {
         return ownerId;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public int getLocationId() {
+        return locationId;
+    }
+
+    public void setLocationId(int locationId) {
+        this.locationId = locationId;
+    }
+
+    public float getArea() {
+        return area;
+    }
+
+    public void setArea(float area) {
+        this.area = area;
+    }
+
+    public float getPrice() {
+        return price;
+    }
+
+    public void setPrice(float price) {
+        this.price = price;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

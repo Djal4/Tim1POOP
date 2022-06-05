@@ -36,6 +36,12 @@ public class Sightseeing {
         this.time = time;
         this.mark = mark;
     }
+    public Sightseeing(int userId, int adId, LocalDateTime time) {
+        this.userId = userId;
+        this.adId = adId;
+        this.time = time;
+        this.accepted=false;
+    }
     public Integer getId() {
         return id;
     }
@@ -44,6 +50,9 @@ public class Sightseeing {
         return userId;
     }
 
+    public void setId(Integer id) {
+        this.id = id;
+    }
     public int getAdId() {
         return adId;
     }

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 04, 2022 at 06:37 PM
+-- Generation Time: Jun 05, 2022 at 02:44 PM
 -- Server version: 10.4.21-MariaDB
 -- PHP Version: 8.0.12
 
@@ -29,9 +29,12 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `advertisments` (
   `id` int(11) NOT NULL,
-  `flat_id` int(11) NOT NULL,
   `advertisment_category_id` int(11) NOT NULL,
-  `owner_id` int(11) NOT NULL
+  `owner_id` int(11) NOT NULL,
+  `description` text COLLATE utf8_unicode_ci NOT NULL,
+  `location_id` int(11) NOT NULL,
+  `price` float NOT NULL,
+  `area` float NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
@@ -43,18 +46,6 @@ CREATE TABLE `advertisments` (
 CREATE TABLE `advertisment_categories` (
   `id` int(11) NOT NULL,
   `title` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `flats`
---
-
-CREATE TABLE `flats` (
-  `id` int(11) NOT NULL,
-  `description` text COLLATE utf8_unicode_ci NOT NULL,
-  `location` varchar(100) COLLATE utf8_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
@@ -72,7 +63,7 @@ CREATE TABLE `hibernate_sequence` (
 --
 
 INSERT INTO `hibernate_sequence` (`next_val`) VALUES
-(1);
+(3);
 
 -- --------------------------------------------------------
 
@@ -83,6 +74,20 @@ INSERT INTO `hibernate_sequence` (`next_val`) VALUES
 CREATE TABLE `likes` (
   `user_id` int(11) NOT NULL,
   `advertisment_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `locations`
+--
+
+CREATE TABLE `locations` (
+  `id` int(11) NOT NULL,
+  `city` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+  `street` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+  `flat_number` varchar(10) COLLATE utf8_unicode_ci NOT NULL,
+  `country` varchar(30) COLLATE utf8_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
@@ -140,7 +145,7 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `first_name`, `last_name`, `image_id`, `image_path`, `role_id`, `username`, `password`) VALUES
+INSERT INTO `users` (`id`, `firstname`, `lastname`, `image_id`, `image_path`, `role_id`, `username`, `password`) VALUES
 (1, 'Ime', 'Prezime', 1, 'nsn\'mdgdd', 1, 'user', 'password');
 
 --
@@ -153,8 +158,8 @@ INSERT INTO `users` (`id`, `first_name`, `last_name`, `image_id`, `image_path`, 
 ALTER TABLE `advertisments`
   ADD PRIMARY KEY (`id`),
   ADD KEY `fk_advertisment_category` (`advertisment_category_id`),
-  ADD KEY `fk_place` (`flat_id`),
-  ADD KEY `fk_owner` (`owner_id`);
+  ADD KEY `fk_owner` (`owner_id`),
+  ADD KEY `fk_location` (`location_id`);
 
 --
 -- Indexes for table `advertisment_categories`
@@ -163,17 +168,17 @@ ALTER TABLE `advertisment_categories`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `flats`
---
-ALTER TABLE `flats`
-  ADD PRIMARY KEY (`id`);
-
---
 -- Indexes for table `likes`
 --
 ALTER TABLE `likes`
   ADD PRIMARY KEY (`user_id`,`advertisment_id`),
   ADD KEY `fk_advertisment` (`advertisment_id`);
+
+--
+-- Indexes for table `locations`
+--
+ALTER TABLE `locations`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `roles`
@@ -214,9 +219,9 @@ ALTER TABLE `advertisment_categories`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `flats`
+-- AUTO_INCREMENT for table `locations`
 --
-ALTER TABLE `flats`
+ALTER TABLE `locations`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
@@ -246,8 +251,8 @@ ALTER TABLE `users`
 --
 ALTER TABLE `advertisments`
   ADD CONSTRAINT `fk_advertisment_category` FOREIGN KEY (`advertisment_category_id`) REFERENCES `advertisment_categories` (`id`),
-  ADD CONSTRAINT `fk_owner` FOREIGN KEY (`owner_id`) REFERENCES `users` (`id`),
-  ADD CONSTRAINT `fk_place` FOREIGN KEY (`flat_id`) REFERENCES `flats` (`id`);
+  ADD CONSTRAINT `fk_location` FOREIGN KEY (`location_id`) REFERENCES `locations` (`id`),
+  ADD CONSTRAINT `fk_owner` FOREIGN KEY (`owner_id`) REFERENCES `users` (`id`);
 
 --
 -- Constraints for table `likes`
