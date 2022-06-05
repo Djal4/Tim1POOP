@@ -10,15 +10,15 @@ public class Sightseeing {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
-    private Integer id;
+    private long id;
 
     @Column(name = "user_id")
     //ForeignKey
-    private int userId;
+    private long userId;
 
     @Column(name = "advertisment_id")
     //ForeignKey
-    private int adId;
+    private long adId;
 
     @Column(name = "accepted")
     private boolean accepted;
@@ -28,7 +28,7 @@ public class Sightseeing {
 
     @Column(name = "mark")
     private float mark;
-    public Sightseeing(Integer id, int userId, int adId, boolean accepted, LocalDateTime time, float mark) {
+    public Sightseeing(long id, long userId, long adId, boolean accepted, LocalDateTime time, float mark) {
         this.id = id;
         this.userId = userId;
         this.adId = adId;
@@ -36,24 +36,24 @@ public class Sightseeing {
         this.time = time;
         this.mark = mark;
     }
-    public Sightseeing(int userId, int adId, LocalDateTime time) {
+    public Sightseeing(long userId, long adId, LocalDateTime time) {
         this.userId = userId;
         this.adId = adId;
         this.time = time;
         this.accepted=false;
     }
-    public Integer getId() {
+    public long getId() {
         return id;
     }
 
-    public int getUserId() {
+    public long getUserId() {
         return userId;
     }
 
-    public void setId(Integer id) {
+    public void setId(long id) {
         this.id = id;
     }
-    public int getAdId() {
+    public long getAdId() {
         return adId;
     }
 
@@ -69,11 +69,11 @@ public class Sightseeing {
         return mark;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(long userId) {
         this.userId = userId;
     }
 
-    public void setAdId(int adId) {
+    public void setAdId(long adId) {
         this.adId = adId;
     }
 

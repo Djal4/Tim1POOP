@@ -8,7 +8,7 @@ public class AdCategory {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
-    private Integer id;
+    private long id;
 
     @Column(name = "title")
     private String title;
@@ -16,15 +16,15 @@ public class AdCategory {
     public AdCategory() {
     }
 
-    public AdCategory(Integer id, String title) {
+    public AdCategory(long id, String title) {
         this.id = id;
         this.title = title;
     }
 
-    public Integer getId() {
+    public long getId() {
         return id;
     }
-    public void setId(Integer id) {
+    public void setId(long id) {
         this.id = id;
     }
     public String getTitle() {

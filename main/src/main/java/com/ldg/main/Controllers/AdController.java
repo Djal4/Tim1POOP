@@ -31,7 +31,7 @@ public class AdController {
         }
     }
     @GetMapping("/{id}")
-    public ResponseEntity<?> getById(@PathVariable("id") int id){
+    public ResponseEntity<?> getById(@PathVariable("id") long id){
         Optional<Ad> optionalAd=adRepository.findById(id);
         if(optionalAd.isPresent())
             return ResponseEntity.ok(optionalAd.get());

@@ -8,16 +8,16 @@ public class Ad {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
-    private Integer id;
+    private long id;
 
     @Column(name = "advertisment_category_id")
-    private int adCategoryId;
+    private long adCategoryId;
 
     @Column(name = "owner_id")
-    private int ownerId;
+    private long ownerId;
 
     @Column(name = "location_id")
-    private int locationId;
+    private long locationId;
 
     @Column(name="area")
     private float area;
@@ -32,41 +32,41 @@ public class Ad {
         
     }
 
-    public Ad(Integer id, int adCategoryId, int ownerId) {
+    public Ad(long id, long adCategoryId, long ownerId) {
         this.id = id;
         this.adCategoryId = adCategoryId;
         this.ownerId = ownerId;
     }
 
-    public Integer getId() {
+    public long getId() {
         return id;
     }
 
-    public void setAdCategoryId(int adCategoryId) {
+    public void setAdCategoryId(long adCategoryId) {
         this.adCategoryId = adCategoryId;
     }
 
-    public void setOwnerId(int ownerId) {
+    public void setOwnerId(long ownerId) {
         this.ownerId = ownerId;
     }
 
-    public int getAdCategoryId() {
+    public long getAdCategoryId() {
         return adCategoryId;
     }
 
-    public int getOwnerId() {
+    public long getOwnerId() {
         return ownerId;
     }
 
-    public void setId(Integer id) {
+    public void setId(long id) {
         this.id = id;
     }
 
-    public int getLocationId() {
+    public long getLocationId() {
         return locationId;
     }
 
-    public void setLocationId(int locationId) {
+    public void setLocationId(long locationId) {
         this.locationId = locationId;
     }
 

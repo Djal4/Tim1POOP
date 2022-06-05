@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -23,7 +24,7 @@ public class SightseeingController {
     SightseeingRepository sightseeingRepository;
     
     @PostMapping("/request")
-    public ResponseEntity<?> requestSightseeing(@RequestParam("time") LocalDateTime time,@RequestParam("ad_id") int adId,@RequestParam("myId") int myId){
+    public ResponseEntity<?> requestSightseeing(@RequestParam("time") LocalDateTime time,@RequestParam("ad_id") long adId,@RequestParam("myId") long myId){
         try{
         return ResponseEntity.ok(sightseeingRepository.save(new Sightseeing(myId,adId,time)));
         }
@@ -32,7 +33,7 @@ public class SightseeingController {
         }
     }
     @PutMapping("/accept/{id}")
-    public ResponseEntity<?> acceptSightseeing(@PathVariable("id") int id){
+    public ResponseEntity<?> acceptSightseeing(@PathVariable("id") long id){
         //if user is owner
         Optional<Sightseeing> optional=sightseeingRepository.findById(id);
         if(optional.isPresent())
@@ -44,4 +45,10 @@ public class SightseeingController {
         }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("wrong");
     }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteById(@PathVariable("id") long id){
+        sightseeingRepository.deleteById(id);
+        return ResponseEntity.ok("");
+    }
+
 }
