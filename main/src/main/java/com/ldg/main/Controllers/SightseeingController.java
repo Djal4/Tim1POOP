@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -17,12 +18,20 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ldg.main.Models.Sightseeing;
 import com.ldg.main.Repository.SightseeingRepository;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/sightseeing")
 public class SightseeingController {
     @Autowired
     SightseeingRepository sightseeingRepository;
     
+    /* 
+    @GetMapping("/owner/{id}")
+    public List<Sightseeing> getByOwnerId(@PathVariable("id") long id){
+        return 
+    }
+    */
     @PostMapping("/request")
     public ResponseEntity<?> requestSightseeing(@RequestParam("time") LocalDateTime time,@RequestParam("ad_id") long adId,@RequestParam("myId") long myId){
         try{
