@@ -1,7 +1,9 @@
 package com.ldg.main.Services;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
 
+@Service
 public class AuthService {
     BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 

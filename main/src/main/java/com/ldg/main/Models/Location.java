@@ -19,6 +19,11 @@ public class Location {
     @Column(name = "flat_number")
     private String flatNumber;
 
+    @Column(name = "country")
+    private String country;
+    public Location(){
+
+    }
     public long getId() {
         return id;
     }
@@ -58,7 +63,4 @@ public class Location {
     public void setCountry(String country) {
         this.country = country;
     }
-
-    @Column(name = "country")
-    private String country;
 }

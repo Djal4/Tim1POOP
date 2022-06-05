@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 05, 2022 at 04:36 PM
+-- Generation Time: Jun 05, 2022 at 07:24 PM
 -- Server version: 10.4.21-MariaDB
 -- PHP Version: 8.0.12
 
@@ -25,11 +25,15 @@ DELIMITER $$
 --
 -- Procedures
 --
-CREATE DEFINER=`root`@`localhost` PROCEDURE `findByOwnerId` (IN `id` INT)  BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `findSightseeingByOwnerId` (IN `id` INT)  BEGIN
 SELECT * FROM sightseeing s WHERE EXISTS
 (
     SELECT * FROM advertisments a WHERE s.advertisment_id=a.id AND a.owner_id = id
 );
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `findSightseeingByUserId` (IN `id` INT)  BEGIN
+SELECT * FROM sightseeing s WHERE s.user_id = id;
 END$$
 
 DELIMITER ;
@@ -91,7 +95,7 @@ CREATE TABLE `hibernate_sequence` (
 --
 
 INSERT INTO `hibernate_sequence` (`next_val`) VALUES
-(3);
+(4);
 
 -- --------------------------------------------------------
 
@@ -164,7 +168,8 @@ CREATE TABLE `sightseeing` (
 --
 
 INSERT INTO `sightseeing` (`id`, `user_id`, `advertisment_id`, `accepted`, `time`, `mark`) VALUES
-(1, 1, 2, 0, '2022-06-05 16:12:07', 0);
+(1, 1, 2, 0, '2022-06-05 16:12:07', 0),
+(3, 1, 2, 0, '2022-06-05 16:12:07', 0);
 
 -- --------------------------------------------------------
 
@@ -188,7 +193,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `firstname`, `lastname`, `image_id`, `image_path`, `role_id`, `username`, `password`) VALUES
-(1, 'Ime', 'Prezime', 1, 'nsn\'mdgdd', 1, 'user', 'password');
+(1, 'Ime', 'Prezime', 1, 'nsn\'mdgdd', 1, 'user', '$2a$10$pTme2grcKbjhySjxx.24z.OJ2wwDSYuyj/WuaYofD3GVQaNRg9w.S');
 
 --
 -- Indexes for dumped tables
@@ -276,7 +281,7 @@ ALTER TABLE `roles`
 -- AUTO_INCREMENT for table `sightseeing`
 --
 ALTER TABLE `sightseeing`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `users`

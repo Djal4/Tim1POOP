@@ -24,11 +24,14 @@ public class Sightseeing {
     private boolean accepted;
 
     @Column(name = "time")
-    private LocalDateTime time;
+    private String time;
 
     @Column(name = "mark")
     private float mark;
-    public Sightseeing(long id, long userId, long adId, boolean accepted, LocalDateTime time, float mark) {
+    public Sightseeing(){
+        
+    }
+    public Sightseeing(long id, long userId, long adId, boolean accepted, String time, float mark) {
         this.id = id;
         this.userId = userId;
         this.adId = adId;
@@ -36,7 +39,7 @@ public class Sightseeing {
         this.time = time;
         this.mark = mark;
     }
-    public Sightseeing(long userId, long adId, LocalDateTime time) {
+    public Sightseeing(long userId, long adId, String time) {
         this.userId = userId;
         this.adId = adId;
         this.time = time;
@@ -61,7 +64,7 @@ public class Sightseeing {
         return accepted;
     }
 
-    public LocalDateTime getTime() {
+    public String getTime() {
         return time;
     }
 
@@ -81,7 +84,7 @@ public class Sightseeing {
         this.accepted = accepted;
     }
 
-    public void setTime(LocalDateTime time) {
+    public void setTime(String time) {
         this.time = time;
     }
 
