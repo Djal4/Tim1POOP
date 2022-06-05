@@ -68,7 +68,7 @@ public class User {
         return this.pictureID;
     }
 
-    public void setFirstame(String firstname)
+    public void setFirstname(String firstname)
     {
         this.firstname=firstname;
     }

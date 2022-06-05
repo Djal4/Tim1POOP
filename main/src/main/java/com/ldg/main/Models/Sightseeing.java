@@ -57,7 +57,7 @@ public class Sightseeing {
         return adId;
     }
 
-    public boolean isAccepted() {
+    public boolean getAccepted() {
         return accepted;
     }
 
