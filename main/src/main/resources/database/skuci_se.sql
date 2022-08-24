@@ -11,6 +11,9 @@ SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
 
+CREATE DATABASE IF NOT EXISTS skuci_se;
+
+USE skuci_se;
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -25,6 +28,16 @@ DELIMITER $$
 --
 -- Procedures
 --
+CREATE DEFINER=`root`@`localhost` PROCEDURE `findMyAds` (IN `ID` INT)   BEGIN
+	SET @id=ID;
+	SELECT * FROM advertisments ad WHERE ad.owner_id=@id; 
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `findOtherAds` (IN `ID` INT)   BEGIN
+	SET @id=ID;
+	SELECT * FROM advertisments ad WHERE ad.owner_id != @id; 
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `findSightseeingByOwnerId` (IN `id` INT)  BEGIN
 SELECT * FROM sightseeing s WHERE EXISTS
 (

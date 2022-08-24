@@ -1,7 +1,5 @@
 package com.ldg.main.Models;
 
-import java.time.LocalDateTime;
-
 import javax.persistence.*;
 
 @Entity

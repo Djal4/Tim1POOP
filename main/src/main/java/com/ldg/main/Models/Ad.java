@@ -1,6 +1,9 @@
 package com.ldg.main.Models;
 
 import javax.persistence.*;
+import javax.validation.constraints.*;
+
+import org.springframework.lang.Nullable;
 
 @Entity
 @Table(name = "advertisments")
@@ -10,26 +13,37 @@ public class Ad {
     @Column(name = "id")
     private long id;
 
+    @Min(0)
+    @Digits(integer = 10, fraction = 0)
     @Column(name = "advertisment_category_id")
-    private long adCategoryId;
+    private long adCategoryId = -1;
 
+    @Min(0)
+    @Digits(integer = 10, fraction = 0)
     @Column(name = "owner_id")
-    private long ownerId;
+    private long ownerId = -1;
 
+    @Min(0)
+    @Digits(integer = 10, fraction = 0)
     @Column(name = "location_id")
-    private long locationId;
+    private long locationId = -1;
 
-    @Column(name="area")
-    private float area;
+    @Min(0)
+    @Digits(integer = 10, fraction = 2)
+    @Column(name = "area")
+    private float area = -1;
 
+    @Min(0)
+    @Digits(integer = 10, fraction = 2)
     @Column(name = "price")
-    private float price;
+    private float price = -1;
 
+    @Nullable()
     @Column(name = "description")
-    private String description;
+    private String description = "";
 
-    public Ad(){
-        
+    public Ad() {
+
     }
 
     public Ad(long id, long adCategoryId, long ownerId) {
