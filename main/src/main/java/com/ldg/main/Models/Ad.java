@@ -1,40 +1,43 @@
 package com.ldg.main.Models;
 
 import javax.persistence.*;
-import javax.validation.constraints.*;
 
 import org.springframework.lang.Nullable;
+
+import com.ldg.main.payload.request.AdCreateRequest;
 
 @Entity
 @Table(name = "advertisments")
 public class Ad {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
     private long id;
 
-    @Min(0)
-    @Digits(integer = 10, fraction = 0)
-    @Column(name = "advertisment_category_id")
-    private long adCategoryId = -1;
+    // @Column(name = "advertisment_category_id")
+    // private long adCategoryId = -1;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "advertisment_category_id", referencedColumnName = "id")
+    private AdCategory adCategory;
 
-    @Min(0)
-    @Digits(integer = 10, fraction = 0)
+    public AdCategory getAdCategory() {
+        return adCategory;
+    }
+
+    public void setAdCategory(AdCategory adCategory) {
+        this.adCategory = adCategory;
+    }
+
     @Column(name = "owner_id")
     private long ownerId = -1;
 
-    @Min(0)
-    @Digits(integer = 10, fraction = 0)
     @Column(name = "location_id")
-    private long locationId = -1;
+    private long locationId = 1;
 
-    @Min(0)
-    @Digits(integer = 10, fraction = 2)
     @Column(name = "area")
     private float area = -1;
 
-    @Min(0)
-    @Digits(integer = 10, fraction = 2)
     @Column(name = "price")
     private float price = -1;
 
@@ -46,9 +49,17 @@ public class Ad {
 
     }
 
+    public Ad(AdCreateRequest ad) {
+        // this.adCategoryId = ad.getAdCategoryId();
+        this.area = ad.getArea();
+        this.description = ad.getDescription();
+        this.ownerId = ad.getOwnerId();
+        this.price = ad.getPrice();
+    }
+
     public Ad(long id, long adCategoryId, long ownerId) {
         this.id = id;
-        this.adCategoryId = adCategoryId;
+        // this.adCategoryId = adCategoryId;
         this.ownerId = ownerId;
     }
 
@@ -56,17 +67,17 @@ public class Ad {
         return id;
     }
 
-    public void setAdCategoryId(long adCategoryId) {
-        this.adCategoryId = adCategoryId;
-    }
+    // public void setAdCategoryId(long adCategoryId) {
+    // this.adCategoryId = adCategoryId;
+    // }
 
     public void setOwnerId(long ownerId) {
         this.ownerId = ownerId;
     }
 
-    public long getAdCategoryId() {
-        return adCategoryId;
-    }
+    // public long getAdCategoryId() {
+    // return adCategoryId;
+    // }
 
     public long getOwnerId() {
         return ownerId;

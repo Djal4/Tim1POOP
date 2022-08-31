@@ -1,11 +1,15 @@
 package com.ldg.main.Repository;
 
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import com.ldg.main.Models.User;
 
 @Repository
-public interface UserRepository extends JpaRepository<User,Long> {
-    //public void delete(Integer ID);
+public interface UserRepository extends JpaRepository<User, Long> {
+    // Optional<User> findByEmail(String email);
+
+    Optional<User> findByUsername(String username);
 }

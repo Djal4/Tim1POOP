@@ -76,8 +76,8 @@ public class Updater {
             ad2 = add.get();
             if (!isEmpty(ad.getDescription()))
                 ad2.setDescription(ad.getDescription());
-            if (!isEmpty(ad.getAdCategoryId()))
-                ad2.setAdCategoryId(ad.getAdCategoryId());
+            // if (!isEmpty(ad.getAdCategoryId()))
+            // ad2.setAdCategoryId(ad.getAdCategoryId());
             if (!isEmpty(ad.getArea()))
                 ad2.setArea(ad.getArea());
             if (!isEmpty(ad.getPrice()))

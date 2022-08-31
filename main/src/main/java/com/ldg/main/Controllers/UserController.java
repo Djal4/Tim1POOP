@@ -19,7 +19,7 @@ import com.ldg.main.Repository.UserRepository;
 @RestController
 @RequestMapping("/users")
 public class UserController {
-    
+
     @Autowired
     private UserRepository userRepository;
     @Autowired
@@ -27,38 +27,33 @@ public class UserController {
     private Optional<User> user;
 
     @GetMapping
-    public List<User> index()
-    {
-        List <User> Users=userRepository.findAll();
+    public List<User> index() {
+        List<User> Users = userRepository.findAll();
         return Users;
     }
 
     @GetMapping("/{user}")
-    public User show(@PathVariable(value="user") Long ID)
-    {
-        user=userRepository.findById(ID);
-        if(user.isPresent())
+    public User show(@PathVariable(value = "user") Long ID) {
+        user = userRepository.findById(ID);
+        if (user.isPresent())
             return user.get();
         else
             return null;
     }
 
     @PutMapping("/{user}")
-    public User update(@PathVariable(value="user") Long ID)
-    {
-        user=userRepository.findById(ID);
+    public User update(@PathVariable(value = "user") Long ID) {
+        user = userRepository.findById(ID);
         return new User();
     }
 
     @PostMapping
-    public User store(@RequestBody User user)
-    {
+    public User store(@RequestBody User user) {
         return userService.saveUser(user);
     }
 
     @DeleteMapping("/{user}")
-    public boolean destroy(@PathVariable(value="user") Long ID)
-    {
+    public boolean destroy(@PathVariable(value = "user") Long ID) {
         userRepository.delete(this.show(ID));
         return true;
     }

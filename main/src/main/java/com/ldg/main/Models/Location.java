@@ -10,7 +10,7 @@ public class Location {
     @Column(name = "id")
     private long id;
 
-    @Column(name="city")
+    @Column(name = "city")
     private String city;
 
     @Column(name = "street")
@@ -21,9 +21,18 @@ public class Location {
 
     @Column(name = "country")
     private String country;
-    public Location(){
+
+    public Location() {
 
     }
+
+    public Location(String city, String street, String flatNumber, String country) {
+        this.city = city;
+        this.street = street;
+        this.flatNumber = flatNumber;
+        this.country = country;
+    }
+
     public long getId() {
         return id;
     }

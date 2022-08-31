@@ -13,17 +13,22 @@ import org.springframework.web.bind.annotation.*;
 
 import com.ldg.main.Models.Ad;
 import com.ldg.main.Repository.AdRepository;
+import com.ldg.main.Services.AdService;
+import com.ldg.main.payload.request.AdCreateRequest;
 
 @RestController
 @RequestMapping("/api/ads")
 public class AdController {
+    @Autowired
+    AdService adService;
+
     @Autowired
     AdRepository adRepository;
 
     @GetMapping
     public ResponseEntity<?> getAll() {
         try {
-            return ResponseEntity.ok(adRepository.findAll());
+            return ResponseEntity.ok(adService.findAll());
         } catch (Exception e) {
             Map<String, String> map = new HashMap<>();
             map.put("message", "INTERNAL SERVER ERROR");
@@ -62,9 +67,9 @@ public class AdController {
     }
 
     @PostMapping // ownerId is part of request body
-    public ResponseEntity<?> store(@Valid @RequestBody Ad ad) {
+    public ResponseEntity<?> store(@Valid @RequestBody AdCreateRequest ad) {
         try {
-            adRepository.save(ad);
+            adService.create(ad);
             Map<String, String> map = new HashMap<>();
             map.put("message", "Stored");
             return ResponseEntity.status(HttpStatus.CREATED).body(map);
@@ -75,10 +80,10 @@ public class AdController {
         }
     }
 
-    @PatchMapping // ownerId is part of request body
-    public ResponseEntity<?> update(@Valid @RequestBody Ad ad) {
+    @PatchMapping("/{id}") // ownerId is part of request body
+    public ResponseEntity<?> update(@PathVariable("id") long id, @RequestBody AdCreateRequest ad) {
         try {
-            adRepository.save(ad);
+            adService.update(id, ad);
             Map<String, String> map = new HashMap<>();
             map.put("message", "Updated");
             return ResponseEntity.status(HttpStatus.OK).body(map);
