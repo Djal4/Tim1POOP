@@ -10,7 +10,7 @@ public class AdCreateRequest {
     @Min(0)
     private long adCategoryId = -1;
 
-    @Min(0)
+    @Nullable
     private long ownerId = -1;
 
     @Min(0)

@@ -9,11 +9,9 @@ import org.springframework.stereotype.Component;
 import com.ldg.main.Repository.UserRepository;
 import com.ldg.main.Services.AuthService;
 import com.ldg.main.Models.Ad;
-import com.ldg.main.Models.Location;
 import com.ldg.main.Models.Sightseeing;
 import com.ldg.main.Models.User;
 import com.ldg.main.Repository.AdRepository;
-import com.ldg.main.Repository.LocationRepository;
 import com.ldg.main.Repository.SightseeingRepository;
 
 @Component
@@ -26,8 +24,6 @@ public class Updater {
     @Autowired
     private AdRepository adRepository;
     @Autowired
-    private LocationRepository locationRepository;
-    @Autowired
     private SightseeingRepository sightseeingRepository;
 
     public ResponseEntity<?> update(Long ID, Object obj) {
@@ -37,8 +33,6 @@ public class Updater {
             this.updateSightsee(ID, (Sightseeing) obj);
         if (obj instanceof Ad)
             this.updateAd(ID, (Ad) obj);
-        if (obj instanceof Location)
-            this.updateLocation(ID, (Location) obj);
 
         if (obj == null)
             return ResponseEntity.status(400).body("Wrong data.");
@@ -104,27 +98,6 @@ public class Updater {
 
             sightseeingRepository.save(sig2);
             return sig2;
-        }
-        return null;
-    }
-
-    public Location updateLocation(Long ID, Location location) {
-        Location loc2;
-        Optional<Location> loc = locationRepository.findById(ID);
-        if (loc.isPresent()) {
-            loc2 = loc.get();
-            if (!isEmpty(location.getCity()))
-                loc2.setCity(location.getCity());
-            if (!isEmpty(location.getCountry()))
-                loc2.setCountry(location.getCountry());
-            if (!isEmpty(location.getStreet()))
-                loc2.setStreet(location.getStreet());
-            if (!isEmpty(location.getFlatNumber()))
-                loc2.setFlatNumber(location.getFlatNumber());
-
-            locationRepository.save(loc2);
-
-            return loc2;
         }
         return null;
     }

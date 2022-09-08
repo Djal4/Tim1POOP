@@ -16,7 +16,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.ldg.main.Models.User;
 import com.ldg.main.Models.UserDetailsImpl;
 
 @Component

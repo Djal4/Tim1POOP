@@ -11,11 +11,10 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ldg.main.Models.User;
 import com.ldg.main.Models.UserDetailsImpl;
-import com.ldg.main.Services.JwtUserDetailsService;
 
 import com.ldg.main.config.JwtTokenUtil;
 import com.ldg.main.payload.request.JwtRequest;
@@ -45,4 +44,5 @@ public class JwtAuthenticationController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
     }
+
 }
