@@ -21,6 +21,10 @@ public class AdCategory {
         this.title = title;
     }
 
+    public AdCategory(long id) {
+        this.id = id;
+    }
+
     public long getId() {
         return id;
     }

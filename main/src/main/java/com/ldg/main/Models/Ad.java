@@ -15,19 +15,19 @@ public class Ad {
     @Column(name = "id")
     private long id;
 
-    // @Column(name = "advertisment_category_id")
-    // private long adCategoryId = -1;
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "advertisment_category_id", referencedColumnName = "id")
-    private AdCategory adCategory;
+    @Column(name = "advertisment_category_id")
+    private long adCategoryId = -1;
+    // @ManyToOne(cascade = CascadeType.ALL)
+    // @JoinColumn(name = "advertisment_category_id", referencedColumnName = "id")
+    // private AdCategory adCategory;
 
-    public AdCategory getAdCategory() {
-        return adCategory;
-    }
+    // public AdCategory getAdCategory() {
+    // return adCategory;
+    // }
 
-    public void setAdCategory(AdCategory adCategory) {
-        this.adCategory = adCategory;
-    }
+    // public void setAdCategory(AdCategory adCategory) {
+    // this.adCategory = adCategory;
+    // }
 
     @Column(name = "owner_id")
     private long ownerId = -1;
@@ -50,7 +50,7 @@ public class Ad {
     }
 
     public Ad(AdCreateRequest ad) {
-        // this.adCategoryId = ad.getAdCategoryId();
+        this.adCategoryId = ad.getAdCategoryId();
         this.area = ad.getArea();
         this.description = ad.getDescription();
         this.ownerId = ad.getOwnerId();
@@ -59,7 +59,7 @@ public class Ad {
 
     public Ad(long id, long adCategoryId, long ownerId) {
         this.id = id;
-        // this.adCategoryId = adCategoryId;
+        this.adCategoryId = adCategoryId;
         this.ownerId = ownerId;
     }
 
@@ -67,17 +67,17 @@ public class Ad {
         return id;
     }
 
-    // public void setAdCategoryId(long adCategoryId) {
-    // this.adCategoryId = adCategoryId;
-    // }
+    public void setAdCategoryId(long adCategoryId) {
+        this.adCategoryId = adCategoryId;
+    }
 
     public void setOwnerId(long ownerId) {
         this.ownerId = ownerId;
     }
 
-    // public long getAdCategoryId() {
-    // return adCategoryId;
-    // }
+    public long getAdCategoryId() {
+        return adCategoryId;
+    }
 
     public long getOwnerId() {
         return ownerId;

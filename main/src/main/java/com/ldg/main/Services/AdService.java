@@ -15,24 +15,18 @@ public class AdService {
     @Autowired
     private AdRepository adRepository;
 
-    @Autowired
-    private AdCategoryRepository adCategoryRepository;
-
     public List<Ad> findAll() {
         return adRepository.findAll();
     }
 
     public void create(AdCreateRequest adCreateRequest) {
         Ad ad = new Ad(adCreateRequest);
-        ad.setAdCategory(adCategoryRepository.findById(adCreateRequest.getAdCategoryId()).get());
         adRepository.save(ad);
     }
 
     public void update(long id, AdCreateRequest adCreateRequest) throws Exception {
-        // Ad ad=adRepository.findById(id).get();
-        // if(ad==null)
-        // throw new Exception("Prazno");
-        Ad ad = adRepository.findById(id).get();
+        Ad ad = new Ad(adCreateRequest);
+        ad.setId(id);
         adRepository.save(ad);
     }
 }

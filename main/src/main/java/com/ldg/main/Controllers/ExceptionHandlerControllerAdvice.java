@@ -3,10 +3,14 @@ package com.ldg.main.Controllers;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import com.ldg.main.exceptions.HttpStatusCodeException;
+
 import org.springframework.validation.FieldError;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
@@ -44,8 +48,17 @@ public class ExceptionHandlerControllerAdvice {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(map);
     }
 
+    @ExceptionHandler(HttpStatusCodeException.class)
+    protected ResponseEntity<?> handleHttpStatusCodeException(HttpStatusCodeException ex) {
+        Map<String, String> map = new HashMap<>();
+        map.put("message", ex.getMessage());
+        return ResponseEntity.status(ex.getStatusCode()).body(map);
+    }
+
     @ExceptionHandler(Exception.class)
     protected ResponseEntity<?> handleException(Exception ex) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex);
+        Map<String, String> map = new HashMap<>();
+        map.put("message", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(map);
     }
 }

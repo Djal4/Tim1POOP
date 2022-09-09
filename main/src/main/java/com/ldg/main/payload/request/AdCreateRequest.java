@@ -56,32 +56,4 @@ public class AdCreateRequest {
     public void setLocationId(long locationId) {
         this.locationId = locationId;
     }
-
-    @Nullable
-    private String city;
-
-    @Nullable
-    private String street;
-
-    @Nullable
-    private String flatNumber;
-
-    @Nullable
-    private String country;
-
-    public String getCity() {
-        return city;
-    }
-
-    public String getCountry() {
-        return country;
-    }
-
-    public String getFlatNumber() {
-        return flatNumber;
-    }
-
-    public String getStreet() {
-        return street;
-    }
 }
