@@ -10,13 +10,11 @@ import org.springframework.validation.FieldError;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.security.access.AccessDeniedException;
 
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @RestControllerAdvice
@@ -39,13 +37,6 @@ public class ExceptionHandlerControllerAdvice {
         Map<String, String> map = new HashMap<>();
         map.put("message", ex.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(map);
-    }
-
-    @ExceptionHandler(AccessDeniedException.class)
-    protected ResponseEntity<?> handleAccessDeniedException(AccessDeniedException ex) {
-        Map<String, String> map = new HashMap<>();
-        map.put("message", ex.getMessage());
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(map);
     }
 
     @ExceptionHandler(HttpStatusCodeException.class)

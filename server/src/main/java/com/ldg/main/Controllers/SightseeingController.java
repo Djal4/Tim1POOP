@@ -1,28 +1,23 @@
 package com.ldg.main.Controllers;
 
-import java.util.Optional;
+import java.util.*;
+import java.text.*;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.ldg.main.Models.Ad;
 import com.ldg.main.Models.Sightseeing;
 import com.ldg.main.Repository.AdRepository;
 import com.ldg.main.Repository.SightseeingRepository;
+import com.ldg.main.Services.SightseeingService;
 import com.ldg.main.exceptions.HttpStatusCodeException;
 import com.ldg.main.payload.request.SightseeingCreateRequest;
 import com.ldg.main.Models.UserDetailsImpl;
 
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
@@ -35,6 +30,9 @@ public class SightseeingController {
     @Autowired
     AdRepository adRepository;
 
+    @Autowired
+    SightseeingService sightseeingService;
+
     /**
      * @apiNote Returns sightseeing for owner of advertisments.
      * @param id long
@@ -44,7 +42,7 @@ public class SightseeingController {
     public ResponseEntity<?> getByOwnerId() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         UserDetailsImpl user = (UserDetailsImpl) auth.getPrincipal();
-        return ResponseEntity.ok(sightseeingRepository.findByOwnerId(user.getID()));
+        return ResponseEntity.ok(sightseeingService.getOwnerSightseeings(user.getID()));
     }
 
     /**
@@ -56,12 +54,12 @@ public class SightseeingController {
     public ResponseEntity<?> getByUserId() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         UserDetailsImpl user = (UserDetailsImpl) auth.getPrincipal();
-        return ResponseEntity.ok(sightseeingRepository.findByUserId(user.getID()));
+        return ResponseEntity.ok(sightseeingService.getUserSightseeings(user.getID()));
     }
 
     @PostMapping("/request")
-    public ResponseEntity<?> requestSightseeing(@RequestBody SightseeingCreateRequest request)
-            throws HttpStatusCodeException {
+    public ResponseEntity<?> requestSightseeing(@Valid @RequestBody SightseeingCreateRequest request)
+            throws HttpStatusCodeException, ParseException {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         UserDetailsImpl user = (UserDetailsImpl) auth.getPrincipal();
         Optional<Ad> ad = adRepository.findById(request.adId);
@@ -69,15 +67,19 @@ public class SightseeingController {
             throw new HttpStatusCodeException(HttpStatus.NOT_FOUND,
                     "Advertisment with id " + request.adId + " not exists!");
         if (user.getID() == ad.get().getOwnerId())
-            throw new HttpStatusCodeException(HttpStatus.NOT_FOUND,
+            throw new HttpStatusCodeException(HttpStatus.CONFLICT,
                     "User cannot request sightseeing for his adverisment!");
-        return ResponseEntity
-                .ok(sightseeingRepository.save(new Sightseeing(user.getID(), request.adId, request.time)));
+        Date now = new Date();
+        SimpleDateFormat sdformat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        Date timeOfSightseeing = sdformat.parse(request.time);
+        if (now.compareTo(timeOfSightseeing) > 0)
+            throw new HttpStatusCodeException(HttpStatus.BAD_REQUEST, "Date must be in future");
+        sightseeingRepository
+                .save(new Sightseeing(user.getID(), request.adId, sdformat.format(timeOfSightseeing)));
+        throw new HttpStatusCodeException(HttpStatus.CREATED, "Created");
     }
 
-    @PutMapping("/accept/{id}")
-    public ResponseEntity<?> acceptSightseeing(@PathVariable("id") long id) throws HttpStatusCodeException {
-        // if user is owner
+    private void acceptOrReject(long id, boolean b) throws HttpStatusCodeException {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         UserDetailsImpl user = (UserDetailsImpl) auth.getPrincipal();
         Optional<Sightseeing> optional = sightseeingRepository.findById(id);
@@ -85,17 +87,37 @@ public class SightseeingController {
             Sightseeing s = optional.get();
             Optional<Ad> ad = adRepository.findById(s.getAdId());
             if (ad.get().getOwnerId() != user.getID())
-                throw new AccessDeniedException("You can\'t accept this sightseeing because you\'re not owner.");
-            s.setAccepted(true);
+                throw new HttpStatusCodeException(HttpStatus.FORBIDDEN,
+                        "You can\'t accept this sightseeing because you\'re not owner.");
+            s.setAccepted(Boolean.valueOf(b));
             sightseeingRepository.save(s);
-            throw new HttpStatusCodeException(HttpStatus.OK, "Accepted");
+            String message;
+            if (b)
+                message = "Accepted";
+            else
+                message = "Rejected";
+            throw new HttpStatusCodeException(HttpStatus.OK, message);
         }
         throw new HttpStatusCodeException(HttpStatus.NOT_FOUND,
                 "Sightseeing not exists!");
     }
 
-    @PutMapping("/mark/{id}")
-    public ResponseEntity<?> markSightseeing(@PathVariable("id") long id, @RequestBody float mark)
+    @PatchMapping("/accept/{id}")
+    public ResponseEntity<?> acceptSightseeing(@PathVariable("id") long id) throws HttpStatusCodeException {
+        // if user is owner
+        acceptOrReject(id, true);
+        return null;
+    }
+
+    @PatchMapping("/reject/{id}")
+    public ResponseEntity<?> rejectSightseeing(@PathVariable("id") long id) throws HttpStatusCodeException {
+        // if user is owner
+        acceptOrReject(id, false);
+        return null;
+    }
+
+    @PutMapping("/mark_and_comment/{id}")
+    public ResponseEntity<?> markSightseeing(@PathVariable("id") long id, @RequestBody Map<String, Integer> mark)
             throws HttpStatusCodeException {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         UserDetailsImpl user = (UserDetailsImpl) auth.getPrincipal();
@@ -103,9 +125,9 @@ public class SightseeingController {
         if (optional.isPresent()) {
             Sightseeing s = optional.get();
             if (s.getUserId() != user.getID())
-                throw new AccessDeniedException(
+                throw new HttpStatusCodeException(HttpStatus.FORBIDDEN,
                         "You can\'t mark this sightseeing because you\'re not user who requested it.");
-            s.setMark(mark);
+            s.setMark(mark.get("mark"));
             sightseeingRepository.save(s);
             throw new HttpStatusCodeException(HttpStatus.OK, "User gave mark");
         }
@@ -114,21 +136,22 @@ public class SightseeingController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteById(@PathVariable("id") long id) {
+    public ResponseEntity<?> deleteById(@PathVariable("id") long id) throws HttpStatusCodeException {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         UserDetailsImpl user = (UserDetailsImpl) auth.getPrincipal();
         Optional<Sightseeing> optional = sightseeingRepository.findById(id);
         if (optional.isPresent()) {
             Sightseeing s = optional.get();
-            if (s.getAccepted())
-                throw new AccessDeniedException("You can\'t delete sightseeing");
+            if (s.getAccepted() != null && s.getAccepted())
+                throw new HttpStatusCodeException(HttpStatus.FORBIDDEN, "You can\'t delete sightseeing");
             Optional<Ad> ad = adRepository.findById(s.getAdId());
             if (s.getUserId() != user.getID() && ad.get().getOwnerId() != user.getID())
-                throw new AccessDeniedException("You can\'t mark this sightseeing because you\'re not owner.");
+                throw new HttpStatusCodeException(HttpStatus.FORBIDDEN,
+                        "You can\'t mark this sightseeing because you\'re not owner.");
             sightseeingRepository.deleteById(id);
-            return ResponseEntity.ok("DELETED");
+            throw new HttpStatusCodeException(HttpStatus.OK, "Deleted");
         }
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("wrong");
+        throw new HttpStatusCodeException(HttpStatus.NOT_FOUND, "Sightseeeing with id " + id + " not exists!");
     }
 
 }

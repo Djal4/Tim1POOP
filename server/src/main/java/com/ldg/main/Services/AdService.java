@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ldg.main.Models.*;
-import com.ldg.main.Repository.AdCategoryRepository;
 import com.ldg.main.Repository.AdRepository;
 import com.ldg.main.payload.request.AdCreateRequest;
 
@@ -24,9 +23,11 @@ public class AdService {
         adRepository.save(ad);
     }
 
-    public void update(long id, AdCreateRequest adCreateRequest) throws Exception {
-        Ad ad = new Ad(adCreateRequest);
-        ad.setId(id);
+    public void update(long id, Ad ad, AdCreateRequest adCreateRequest) throws Exception {
+        ad.setAdCategoryId(adCreateRequest.getAdCategoryId());
+        ad.setArea(adCreateRequest.getArea());
+        ad.setPrice(adCreateRequest.getPrice());
+        ad.setDescription(adCreateRequest.getDescription());
         adRepository.save(ad);
     }
 }

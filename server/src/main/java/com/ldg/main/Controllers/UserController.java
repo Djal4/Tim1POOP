@@ -17,7 +17,7 @@ import com.ldg.main.Models.User;
 import com.ldg.main.Repository.UserRepository;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/api/users")
 public class UserController {
 
     @Autowired

@@ -20,7 +20,7 @@ import com.ldg.main.Models.UserDetailsImpl;
 public class JwtTokenUtil {
     private static final Logger LOGGER = LoggerFactory.getLogger(JwtTokenUtil.class);
 
-    private static final long EXPIRE_DURATION = 1 * 60 * 60 * 1000; // 1 hour
+    private static final long EXPIRE_DURATION = 2 * 60 * 60 * 1000; // 2 hour
 
     @Value("${jwt.secret}")
     private String SECRET_KEY;

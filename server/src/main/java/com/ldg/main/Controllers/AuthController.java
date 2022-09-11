@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ldg.main.Models.UserDetailsImpl;
 
 import com.ldg.main.config.JwtTokenUtil;
+import com.ldg.main.exceptions.HttpStatusCodeException;
 import com.ldg.main.payload.request.JwtRequest;
 import com.ldg.main.payload.response.JwtResponse;
 
@@ -29,7 +30,7 @@ public class AuthController {
     JwtTokenUtil jwtUtil;
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody @Valid JwtRequest request) {
+    public ResponseEntity<?> login(@RequestBody @Valid JwtRequest request) throws HttpStatusCodeException {
         try {
             Authentication authentication = authManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
@@ -42,7 +43,7 @@ public class AuthController {
             return ResponseEntity.ok().body(response);
 
         } catch (BadCredentialsException ex) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            throw new HttpStatusCodeException(HttpStatus.UNAUTHORIZED, "Bad credentials");
         }
     }
 

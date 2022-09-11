@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.1.1
+-- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 05, 2022 at 07:24 PM
--- Server version: 10.4.21-MariaDB
--- PHP Version: 8.0.12
+-- Generation Time: Sep 11, 2022 at 09:24 PM
+-- Server version: 10.4.24-MariaDB
+-- PHP Version: 7.4.29
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -38,14 +38,14 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `findOtherAds` (IN `ID` INT)   BEGIN
 	SELECT * FROM advertisments ad WHERE ad.owner_id != @id; 
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `findSightseeingByOwnerId` (IN `id` INT)  BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `findSightseeingByOwnerId` (IN `id` INT)   BEGIN
 SELECT * FROM sightseeing s WHERE EXISTS
 (
     SELECT * FROM advertisments a WHERE s.advertisment_id=a.id AND a.owner_id = id
 );
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `findSightseeingByUserId` (IN `id` INT)  BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `findSightseeingByUserId` (IN `id` INT)   BEGIN
 SELECT * FROM sightseeing s WHERE s.user_id = id;
 END$$
 
@@ -72,7 +72,8 @@ CREATE TABLE `advertisments` (
 --
 
 INSERT INTO `advertisments` (`id`, `advertisment_category_id`, `owner_id`, `description`, `location_id`, `price`, `area`) VALUES
-(2, 1, 1, 'opis', 1, 1000, 50);
+(4, 1, 1, '', 1, 20, 10),
+(5, 2, 2, 'Korisnik ad updated', 1, 2000, 10);
 
 -- --------------------------------------------------------
 
@@ -108,7 +109,7 @@ CREATE TABLE `hibernate_sequence` (
 --
 
 INSERT INTO `hibernate_sequence` (`next_val`) VALUES
-(4);
+(15);
 
 -- --------------------------------------------------------
 
@@ -171,18 +172,21 @@ CREATE TABLE `sightseeing` (
   `id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `advertisment_id` int(11) NOT NULL,
-  `accepted` tinyint(1) NOT NULL DEFAULT 0,
+  `accepted` tinyint(1) DEFAULT NULL,
   `time` datetime NOT NULL DEFAULT current_timestamp(),
-  `mark` float DEFAULT NULL
+  `mark` int(11) DEFAULT 0,
+  `comment` text COLLATE utf8_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `sightseeing`
 --
 
-INSERT INTO `sightseeing` (`id`, `user_id`, `advertisment_id`, `accepted`, `time`, `mark`) VALUES
-(1, 1, 2, 0, '2022-06-05 16:12:07', 0),
-(3, 1, 2, 0, '2022-06-05 16:12:07', 0);
+INSERT INTO `sightseeing` (`id`, `user_id`, `advertisment_id`, `accepted`, `time`, `mark`, `comment`) VALUES
+(4, 1, 4, 1, '2022-09-11 16:50:44', 0, NULL),
+(12, 2, 4, 1, '2026-08-18 10:15:16', 0, NULL),
+(13, 2, 4, 0, '2026-08-18 10:15:16', 0, NULL),
+(14, 2, 4, NULL, '2026-08-18 10:15:16', 0, NULL);
 
 -- --------------------------------------------------------
 
@@ -206,7 +210,8 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `firstname`, `lastname`, `image_id`, `image_path`, `role_id`, `username`, `password`) VALUES
-(1, 'Ime', 'Prezime', 1, 'nsn\'mdgdd', 1, 'user', '$2a$10$pTme2grcKbjhySjxx.24z.OJ2wwDSYuyj/WuaYofD3GVQaNRg9w.S');
+(1, 'Ime', 'Prezime', 1, 'nsn\'mdgdd', 1, 'user', '$2a$10$pTme2grcKbjhySjxx.24z.OJ2wwDSYuyj/WuaYofD3GVQaNRg9w.S'),
+(2, 'Korisnik', 'Korisnik', 2, 'aaaa', 2, 'korisnik', '$2a$10$zlBFTWQtI7PwoUOOjQLbQu6v49caK2bipyONl5RT5bokqj1ejuk7u');
 
 --
 -- Indexes for dumped tables
@@ -270,7 +275,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `advertisments`
 --
 ALTER TABLE `advertisments`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `advertisment_categories`
@@ -294,13 +299,13 @@ ALTER TABLE `roles`
 -- AUTO_INCREMENT for table `sightseeing`
 --
 ALTER TABLE `sightseeing`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- Constraints for dumped tables
@@ -325,7 +330,7 @@ ALTER TABLE `likes`
 -- Constraints for table `sightseeing`
 --
 ALTER TABLE `sightseeing`
-  ADD CONSTRAINT `fk_advertisment_1` FOREIGN KEY (`advertisment_id`) REFERENCES `advertisments` (`id`),
+  ADD CONSTRAINT `fk_advertisment_1` FOREIGN KEY (`advertisment_id`) REFERENCES `advertisments` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `fk_user_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
 
 --

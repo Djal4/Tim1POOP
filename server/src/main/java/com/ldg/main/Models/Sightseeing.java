@@ -11,25 +11,30 @@ public class Sightseeing {
     private long id;
 
     @Column(name = "user_id")
-    //ForeignKey
+    // ForeignKey
     private long userId;
 
     @Column(name = "advertisment_id")
-    //ForeignKey
+    // ForeignKey
     private long adId;
 
     @Column(name = "accepted")
-    private boolean accepted;
+    private Boolean accepted;
 
     @Column(name = "time")
     private String time;
 
     @Column(name = "mark")
-    private float mark;
-    public Sightseeing(){
-        
+    private int mark;
+
+    @Column(name = "comment")
+    private String comment;
+
+    public Sightseeing() {
+
     }
-    public Sightseeing(long id, long userId, long adId, boolean accepted, String time, float mark) {
+
+    public Sightseeing(long id, long userId, long adId, Boolean accepted, String time, int mark) {
         this.id = id;
         this.userId = userId;
         this.adId = adId;
@@ -37,12 +42,14 @@ public class Sightseeing {
         this.time = time;
         this.mark = mark;
     }
+
     public Sightseeing(long userId, long adId, String time) {
         this.userId = userId;
         this.adId = adId;
         this.time = time;
-        this.accepted=false;
+        this.accepted = null;
     }
+
     public long getId() {
         return id;
     }
@@ -54,11 +61,12 @@ public class Sightseeing {
     public void setId(long id) {
         this.id = id;
     }
+
     public long getAdId() {
         return adId;
     }
 
-    public boolean getAccepted() {
+    public Boolean getAccepted() {
         return accepted;
     }
 
@@ -66,8 +74,12 @@ public class Sightseeing {
         return time;
     }
 
-    public float getMark() {
+    public int getMark() {
         return mark;
+    }
+
+    public String getComment() {
+        return comment;
     }
 
     public void setUserId(long userId) {
@@ -79,14 +91,18 @@ public class Sightseeing {
     }
 
     public void setAccepted(boolean accepted) {
-        this.accepted = accepted;
+        this.accepted = Boolean.valueOf(accepted);
     }
 
     public void setTime(String time) {
         this.time = time;
     }
 
-    public void setMark(float mark) {
+    public void setMark(int mark) {
         this.mark = mark;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 }

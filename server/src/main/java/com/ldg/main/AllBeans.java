@@ -1,10 +1,11 @@
 package com.ldg.main;
 
 import org.springframework.stereotype.Component;
+import org.springframework.web.cors.*;
 import org.springframework.context.annotation.Bean;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.JavaMailSenderImpl;
-import java.util.Properties;
+import org.springframework.mail.javamail.*;
+
+import java.util.*;
 
 import org.springframework.beans.factory.annotation.Value;
 
@@ -38,5 +39,15 @@ public class AllBeans {
         props.put("mail.smtp.starttls.enable", "true");
         props.put("mail.debug", "true");
         return mailSender;
+    }
+
+    @Bean
+    CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PATCH", "DELETE"));
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
     }
 }

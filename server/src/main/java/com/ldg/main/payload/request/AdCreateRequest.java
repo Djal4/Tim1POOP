@@ -7,18 +7,18 @@ import org.springframework.lang.Nullable;
 public class AdCreateRequest {
     public long id;
 
-    @Min(0)
-    private long adCategoryId = -1;
+    @Min(1)
+    private long adCategoryId;
+
+    private long ownerId;
+
+    @Min(1)
+    private float area;
+
+    @Min(1)
+    private float price;
 
     @Nullable
-    private long ownerId = -1;
-
-    @Min(0)
-    private float area = -1;
-
-    @Min(0)
-    private float price = -1;
-
     private String description = "";
 
     public long getAdCategoryId() {

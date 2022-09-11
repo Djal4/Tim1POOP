@@ -1,12 +1,6 @@
 package com.ldg.main.Controllers;
 
-import org.springframework.security.access.AccessDeniedException;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 import javax.validation.Valid;
 
@@ -15,13 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.ldg.main.Models.Ad;
-import com.ldg.main.Models.AdCategory;
-import com.ldg.main.Models.User;
-import com.ldg.main.Models.UserDetailsImpl;
-import com.ldg.main.Repository.AdCategoryRepository;
-import com.ldg.main.Repository.AdRepository;
-import com.ldg.main.Repository.UserRepository;
+import com.ldg.main.Models.*;
+import com.ldg.main.Repository.*;
 import com.ldg.main.Services.AdService;
 import com.ldg.main.exceptions.HttpStatusCodeException;
 import com.ldg.main.payload.request.AdCreateRequest;
@@ -104,31 +93,39 @@ public class AdController {
         ad.setOwnerId(user.getID());
         adService.create(ad);
         Map<String, String> map = new HashMap<>();
-        map.put("message", "Stored");
+        map.put("message", "Created");
         return ResponseEntity.status(HttpStatus.CREATED).body(map);
     }
 
     @PatchMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable("id") long id, @Valid @RequestBody AdCreateRequest ad)
-            throws Exception {
-        Ad adv = adRepository.getReferenceById(id);
+            throws HttpStatusCodeException, Exception {
+        Optional<Ad> optionalAdv = adRepository.findById(id);
+        if (!optionalAdv.isPresent())
+            throw new HttpStatusCodeException(HttpStatus.NOT_FOUND, "Advertisment with id " + id + " not exists!");
+        Ad adv = optionalAdv.get();
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         UserDetailsImpl user = (UserDetailsImpl) auth.getPrincipal();
         if (adv.getOwnerId() != user.getID())
-            throw new AccessDeniedException("You can\'t update ads if you are not owner");
-        adService.update(id, ad);
+            throw new HttpStatusCodeException(HttpStatus.FORBIDDEN, "You can\'t update ads if you are not owner");
+        adService.update(id, adv, ad);
         Map<String, String> map = new HashMap<>();
         map.put("message", "Updated");
         return ResponseEntity.status(HttpStatus.OK).body(map);
     }
 
-    @DeleteMapping("/{id}") // have permission to delete
-    public ResponseEntity<?> destroy(@PathVariable("id") long id) throws AccessDeniedException {
-        Ad ad = adRepository.getReferenceById(id);
+    @DeleteMapping("/{id}") // have permission to delete NOTE: foreign key in sightseeing and likes must be
+                            // CASCADE
+    public ResponseEntity<?> destroy(@PathVariable("id") long id) throws HttpStatusCodeException {
+        Optional<Ad> opt = adRepository.findById(id);
+        if (!opt.isPresent())
+            throw new HttpStatusCodeException(HttpStatus.NOT_FOUND, "Advertisment with id " + id + " not exists!");
+        Ad ad = opt.get();
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         UserDetailsImpl user = (UserDetailsImpl) auth.getPrincipal();
         if (ad.getOwnerId() != user.getID())
-            throw new AccessDeniedException("You can\'t delete ads if you are not owner");
+            throw new HttpStatusCodeException(HttpStatus.FORBIDDEN,
+                    "You can\'t delete this advertisment because you aren\'t owner");
         adRepository.deleteById(id);
         Map<String, String> map = new HashMap<>();
         map.put("message", "Deleted");
