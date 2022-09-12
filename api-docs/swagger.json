@@ -1,0 +1,557 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+    "title": "SkuciSe",
+    "version": "1.0.0",
+    "description": "SkuciSe API Specification"
+    },
+    "tags": [
+        {
+            "name": "Advertisments",
+            "description": "Operations about advertisments"
+        }
+    ],
+    "servers": [
+        {
+            "url": "http://localhost:8080"
+        },
+        {
+            "url": "{server}",
+            "variables": {
+                "server": {
+                    "default": "http://localhost:8080"
+                }
+            }
+        }
+    ],
+    "paths": {
+        "/api/ads":{
+            "get":{
+                "summary": "Get all advertisments",
+                "tags": ["Advertisments"],
+                "responses": {
+                    "200":{
+                        "description": "Successful response",
+                        "content": {
+                            "application/json":{
+                                "schema":{
+                                    "type": "array",
+                                    "items":{
+                                        "type": "object",
+                                        "required": ["id","adCategory","area","price","description","owner"],
+                                        "properties": {
+                                            "id":{
+                                                "type": "integer",
+                                                "example":1
+                                            },
+                                            "adCategory":{
+                                                "type": "string",
+                                                "example":"RENT"
+                                            },
+                                            "area":{
+                                                "type": "number",
+                                                "example":100
+                                            },
+                                            "price":{
+                                                "type": "number",
+                                                "example":1000
+                                            },
+                                            "description":{
+                                                "type": "string",
+                                                "example":"desctiption"
+                                            },
+                                            "owner":{
+                                                "type": "object",
+                                                "required": ["username","name"],
+                                                "properties": {
+                                                    "username":{
+                                                        "type": "string",
+                                                        "example":"user1"
+                                                    },
+                                                    "name":{
+                                                        "type": "string",
+                                                        "example":"Firstname Lastname"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post":{
+                "tags": ["Advertisments"],
+                "summary": "Create adverisment",
+                "requestBody":{
+                    "required": true,
+                    "content": {
+                        "application/json":{
+                            "schema":{
+                                "type": "object",
+                                "required": ["adCategoryId","area","price"],
+                                "properties": {
+                                    "adCategoryId":{
+                                        "type": "integer",
+                                        "example":1
+                                    },
+                                    "area":{
+                                        "type": "number",
+                                        "example":100
+                                    },
+                                    "price":{
+                                        "type": "number",
+                                        "example":1000
+                                    },
+                                    "description":{
+                                        "type": "string",
+                                        "example":"Description"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201":{
+                        "description": "Successful response",
+                        "content": {
+                            "application/json":{
+                                "schema":{
+                                    "type": "object",
+                                    "required":["message"],
+                                    "properties": {
+                                        "message":{
+                                            "type": "string",
+                                            "default":"Created"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400":{
+                        "description": "Bad request",
+                        "content": {
+                            "application/json":{
+                                "schema":{
+                                    "type": "object",
+                                    "properties": {
+                                        "adCategoryId":{
+                                            "type": "string",
+                                            "example":"Error"
+                                        },
+                                        "area":{
+                                            "type": "string",
+                                            "example":"Error"
+                                        },
+                                        "price":{
+                                            "type": "string",
+                                            "example":"Error"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401":{
+                        "description": "Unauthorized. Nobody is logged in.",
+                        "content":{
+                            "application/json":{
+                                "schema":{
+                                    "type": "object",
+                                    "required":["message"],
+                                    "properties": {
+                                        "message":{
+                                            "type": "string",
+                                            "default":"You don't have valid token"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [{"bearerAuth":[]}]
+            }
+        },
+        "/api/ads/my":{
+            "get":{
+                "summary": "Get my advertisments",
+                "description":"Get advertisments of currently logged in user.",
+                "tags": ["Advertisments"],
+                "responses": {
+                    "200":{
+                        "description": "Successful response",
+                        "content": {
+                            "application/json":{
+                                "schema":{
+                                    "type": "array",
+                                    "items":{
+                                        "type": "object",
+                                        "required": ["id","adCategory","area","price","description"],
+                                        "properties": {
+                                            "id":{
+                                                "type": "integer",
+                                                "example":1
+                                            },
+                                            "adCategory":{
+                                                "type": "string",
+                                                "example":"RENT"
+                                            },
+                                            "area":{
+                                                "type": "number",
+                                                "example":100
+                                            },
+                                            "price":{
+                                                "type": "number",
+                                                "example":1000
+                                            },
+                                            "description":{
+                                                "type": "string",
+                                                "example":"desctiption"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401":{
+                        "description": "Unauthorized. Nobody is logged in.",
+                        "content":{
+                            "application/json":{
+                                "schema":{
+                                    "type": "object",
+                                    "required":["message"],
+                                    "properties": {
+                                        "message":{
+                                            "type": "string",
+                                            "default":"You don't have valid token"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [{"bearerAuth":[]}]
+            }
+        },
+        "/api/ads/other":{
+            "get":{
+                "summary": "Get advertisments which are created by other users",
+                "tags": ["Advertisments"],
+                "responses": {
+                    "200":{
+                        "description": "Successful response",
+                        "content": {
+                            "application/json":{
+                                "schema":{
+                                    "type": "array",
+                                    "items":{
+                                        "type": "object",
+                                        "required": ["id","adCategory","area","price","description","owner"],
+                                        "properties": {
+                                            "id":{
+                                                "type": "integer",
+                                                "example":1
+                                            },
+                                            "adCategory":{
+                                                "type": "string",
+                                                "example":"RENT"
+                                            },
+                                            "area":{
+                                                "type": "number",
+                                                "example":100
+                                            },
+                                            "price":{
+                                                "type": "number",
+                                                "example":1000
+                                            },  
+                                            "description":{
+                                                "type": "string",
+                                                "example":"desctiption"
+                                            },
+                                            "owner":{
+                                                "type": "object",
+                                                "required": ["username","name"],
+                                                "properties": {
+                                                    "username":{
+                                                        "type": "string",
+                                                        "example":"user1"
+                                                    },
+                                                    "name":{
+                                                        "type": "string",
+                                                        "example":"Firstname Lastname"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401":{
+                        "description": "Unauthorized. Nobody is logged in.",
+                        "content":{
+                            "application/json":{
+                                "schema":{
+                                    "type": "object",
+                                    "required":["message"],
+                                    "properties": {
+                                        "message":{
+                                            "type": "string",
+                                            "default":"You don't have valid token"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [{"bearerAuth":[]}]
+            }
+        },
+        "/api/ads/{adId}":{
+            "patch":{
+                "tags": ["Advertisments"],
+                "parameters": [
+                    {
+                        "name": "adId",
+                        "description": "Id of advertisment that needs to be updated",
+                        "in": "path",
+                        "required": true,
+                        "schema":{
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "summary": "Update advertisment",
+                "requestBody":{
+                    "required": true,
+                    "content": {
+                        "application/json":{
+                            "schema":{
+                                "type": "object",
+                                "required": ["adCategoryId","area","price"],
+                                "properties": {
+                                    "adCategoryId":{
+                                        "type": "integer",
+                                        "example":1
+                                    },
+                                    "area":{
+                                        "type": "number",
+                                        "example":100
+                                    },
+                                    "price":{
+                                        "type": "number",
+                                        "example":1000
+                                    },
+                                    "description":{
+                                        "type": "string",
+                                        "example":"Description"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200":{
+                        "description": "Successful response",
+                        "content":{
+                            "application/json":{
+                                "schema":{
+                                    "type": "object",
+                                        "required":["message"],
+                                        "properties": {
+                                            "message":{
+                                                "type": "string",
+                                                "default":"Updated"
+                                            }
+                                        }
+                                }
+                            }
+                        }
+                    },
+                    "400":{
+                        "description": "Bad request",
+                        "content": {
+                            "application/json":{
+                                "schema":{
+                                    "type": "object",
+                                    "properties": {
+                                        "adCategoryId":{
+                                            "type": "string",
+                                            "example":"Error"
+                                        },
+                                        "area":{
+                                            "type": "string",
+                                            "example":"Error"
+                                        },
+                                        "price":{
+                                            "type": "string",
+                                            "example":"Error"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401":{
+                        "description": "Unauthorized. Nobody is logged in.",
+                        "content":{
+                            "application/json":{
+                                "schema":{
+                                    "type": "object",
+                                    "required":["message"],
+                                    "properties": {
+                                        "message":{
+                                            "type": "string",
+                                            "default":"You don't have valid token"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "403":{
+                        "description": "Forbidden. You don't have permission to update advertisment.",
+                        "content":{
+                            "application/json":{
+                                "schema":{
+                                    "type": "object",
+                                        "required":["message"],
+                                        "properties": {
+                                            "message":{
+                                                "type": "string",
+                                                "example":"Message"
+                                            }
+                                        }
+                                }
+                            }
+                        }
+                    },
+                    "404":{
+                        "description": "Not found advertisment to update",
+                        "content":{
+                            "application/json":{
+                                "schema":{
+                                    "type": "object",
+                                        "required":["message"],
+                                        "properties": {
+                                            "message":{
+                                                "type": "string",
+                                                "example":"Message"
+                                            }
+                                        }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [{"bearerAuth":[]}]
+            },
+            "delete":{
+                "tags": ["Advertisments"],
+                "parameters": [
+                    {
+                        "name": "adId",
+                        "description": "Id of advertisment that needs to be deleted",
+                        "in": "path",
+                        "required": true,
+                        "schema":{
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "summary": "Delete advertisment",
+                "responses": {
+                    "200":{
+                        "description": "Successful response",
+                        "content":{
+                            "application/json":{
+                                "schema":{
+                                    "type": "object",
+                                        "required":["message"],
+                                        "properties": {
+                                            "message":{
+                                                "type": "string",
+                                                "default":"Deleted"
+                                            }
+                                        }
+                                }
+                            }
+                        }
+                    },
+                    "401":{
+                        "description": "Unauthorized. Nobody is logged in.",
+                        "content":{
+                            "application/json":{
+                                "schema":{
+                                    "type": "object",
+                                    "required":["message"],
+                                    "properties": {
+                                        "message":{
+                                            "type": "string",
+                                            "default":"You don't have valid token"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "403":{
+                        "description": "Forbidden. You don't have permission to delete advertisment.",
+                        "content":{
+                            "application/json":{
+                                "schema":{
+                                    "type": "object",
+                                        "required":["message"],
+                                        "properties": {
+                                            "message":{
+                                                "type": "string",
+                                                "example":"Message"
+                                            }
+                                        }
+                                }
+                            }
+                        }
+                    },
+                    "404":{
+                        "description": "Not found advertisment to delete",
+                        "content":{
+                            "application/json":{
+                                "schema":{
+                                    "type": "object",
+                                        "required":["message"],
+                                        "properties": {
+                                            "message":{
+                                                "type": "string",
+                                                "example":"Message"
+                                            }
+                                        }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [{"bearerAuth":[]}]
+            }
+        }
+
+    },
+    "components": {
+        "securitySchemes": {
+            "bearerAuth":{
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT"
+            }
+        }
+    }
+}

@@ -15,6 +15,7 @@ import com.ldg.main.Repository.AdRepository;
 import com.ldg.main.Repository.SightseeingRepository;
 import com.ldg.main.Services.SightseeingService;
 import com.ldg.main.exceptions.HttpStatusCodeException;
+import com.ldg.main.payload.request.SightSeeingMarkAndCommentRequest;
 import com.ldg.main.payload.request.SightseeingCreateRequest;
 import com.ldg.main.Models.UserDetailsImpl;
 
@@ -89,6 +90,9 @@ public class SightseeingController {
             if (ad.get().getOwnerId() != user.getID())
                 throw new HttpStatusCodeException(HttpStatus.FORBIDDEN,
                         "You can\'t accept this sightseeing because you\'re not owner.");
+            if (s.getAccepted() != null)
+                throw new HttpStatusCodeException(HttpStatus.CONFLICT,
+                        "Sightseeing is already accepted or rejected");
             s.setAccepted(Boolean.valueOf(b));
             sightseeingRepository.save(s);
             String message;
@@ -116,8 +120,9 @@ public class SightseeingController {
         return null;
     }
 
-    @PutMapping("/mark_and_comment/{id}")
-    public ResponseEntity<?> markSightseeing(@PathVariable("id") long id, @RequestBody Map<String, Integer> mark)
+    @PatchMapping("/mark_and_comment/{id}")
+    public ResponseEntity<?> markSightseeing(@PathVariable("id") long id,
+            @Valid @RequestBody SightSeeingMarkAndCommentRequest request)
             throws HttpStatusCodeException {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         UserDetailsImpl user = (UserDetailsImpl) auth.getPrincipal();
@@ -126,10 +131,14 @@ public class SightseeingController {
             Sightseeing s = optional.get();
             if (s.getUserId() != user.getID())
                 throw new HttpStatusCodeException(HttpStatus.FORBIDDEN,
-                        "You can\'t mark this sightseeing because you\'re not user who requested it.");
-            s.setMark(mark.get("mark"));
+                        "You can\'t mark this sightseeing because you\'re not user who requested it!");
+            if (s.getAccepted() != null && !s.getAccepted().booleanValue())
+                throw new HttpStatusCodeException(HttpStatus.FORBIDDEN,
+                        "You can\'t mark this sightseeing because it\'s not accepted!");
+            s.setMark(request.mark);
+            s.setComment(request.comment);
             sightseeingRepository.save(s);
-            throw new HttpStatusCodeException(HttpStatus.OK, "User gave mark");
+            throw new HttpStatusCodeException(HttpStatus.OK, "User gave mark and comment.");
         }
         throw new HttpStatusCodeException(HttpStatus.NOT_FOUND,
                 "Sightseeing not exists!");

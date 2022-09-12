@@ -14,6 +14,7 @@ import com.ldg.main.Repository.*;
 import com.ldg.main.Services.AdService;
 import com.ldg.main.exceptions.HttpStatusCodeException;
 import com.ldg.main.payload.request.AdCreateRequest;
+import com.ldg.main.payload.response.AdMyResponse;
 import com.ldg.main.payload.response.AdResponse;
 
 import org.springframework.security.core.Authentication;
@@ -67,9 +68,11 @@ public class AdController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         UserDetailsImpl user = (UserDetailsImpl) auth.getPrincipal();
         List<Ad> ads = adRepository.findMyAds(user.getID());
-        List<AdResponse> adResponses = new ArrayList<>();
+        List<AdMyResponse> adResponses = new ArrayList<>();
         for (Ad ad : ads) {
-            adResponses.add(createAdResponse(ad));
+            AdCategory adCategory = adCategoryRepository.findById(ad.getAdCategoryId()).get();
+            AdMyResponse my = new AdMyResponse(ad, adCategory);
+            adResponses.add(my);
         }
         return ResponseEntity.status(HttpStatus.OK).body(adResponses);
     }
