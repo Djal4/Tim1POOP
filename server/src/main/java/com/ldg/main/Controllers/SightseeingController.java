@@ -68,7 +68,7 @@ public class SightseeingController {
             throw new HttpStatusCodeException(HttpStatus.NOT_FOUND,
                     "Advertisment with id " + request.adId + " not exists!");
         if (user.getID() == ad.get().getOwnerId())
-            throw new HttpStatusCodeException(HttpStatus.CONFLICT,
+            throw new HttpStatusCodeException(HttpStatus.FORBIDDEN,
                     "User cannot request sightseeing for his adverisment!");
         Date now = new Date();
         SimpleDateFormat sdformat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
@@ -91,7 +91,7 @@ public class SightseeingController {
                 throw new HttpStatusCodeException(HttpStatus.FORBIDDEN,
                         "You can\'t accept this sightseeing because you\'re not owner.");
             if (s.getAccepted() != null)
-                throw new HttpStatusCodeException(HttpStatus.CONFLICT,
+                throw new HttpStatusCodeException(HttpStatus.FORBIDDEN,
                         "Sightseeing is already accepted or rejected");
             s.setAccepted(Boolean.valueOf(b));
             sightseeingRepository.save(s);

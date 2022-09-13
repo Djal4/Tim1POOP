@@ -32,8 +32,8 @@ public class Ad {
     @Column(name = "owner_id")
     private long ownerId = -1;
 
-    @Column(name = "location_id")
-    private long locationId = 1;
+    @Column(name = "city_id")
+    private long cityId = 1;
 
     @Column(name = "area")
     private float area = -1;
@@ -87,12 +87,12 @@ public class Ad {
         this.id = id;
     }
 
-    public long getLocationId() {
-        return locationId;
+    public long getCityId() {
+        return cityId;
     }
 
-    public void setLocationId(long locationId) {
-        this.locationId = locationId;
+    public void setCityId(long cityId) {
+        this.cityId = cityId;
     }
 
     public float getArea() {

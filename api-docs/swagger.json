@@ -7,8 +7,18 @@
     },
     "tags": [
         {
+            "name": "Authorization",
+            "description": ""
+        },
+        {
             "name": "Advertisments",
-            "description": "Operations about advertisments"
+            "description": ""
+        },
+        {
+            "name": "Adveritisment's categories"
+        },
+        {
+            "name": "Sightseeing"
         }
     ],
     "servers": [
@@ -25,6 +35,83 @@
         }
     ],
     "paths": {
+        "/api/auth/login":{
+            "post":{
+                "tags":["Authorization"],
+                "summary": "Login",
+                "requestBody":{
+                    "required": true,
+                    "content": {
+                        "application/json":{
+                            "schema":{
+                                "type": "object",
+                                "required": ["username","password"],
+                                "properties": {
+                                    "username":{
+                                        "type": "string"
+                                    },
+                                    "password":{
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200":{
+                        "description": "Successful response",
+                        "content": {
+                            "application/json":{
+                                "schema":{
+                                    "type": "object",
+                                    "required": ["token"],
+                                    "properties": {
+                                        "token":{
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400":{
+                        "description": "Bad request",
+                        "content": {
+                            "application/json":{
+                                "schema":{
+                                    "type": "object",
+                                    "properties": {
+                                        "username":{
+                                            "type": "string"
+                                        },
+                                        "password":{
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401":{
+                        "description": "Bad credentials",
+                        "content": {
+                            "application/json":{
+                                "schema":{
+                                    "type": "object",
+                                    "properties": {
+                                        "message":{
+                                            "type": "string",
+                                            "default":"Bad credentials"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/ads":{
             "get":{
                 "summary": "Get all advertisments",
@@ -157,7 +244,7 @@
                         }
                     },
                     "401":{
-                        "description": "Unauthorized. Nobody is logged in.",
+                        "description": "Unauthorized. Nobody is logged-in.",
                         "content":{
                             "application/json":{
                                 "schema":{
@@ -180,7 +267,7 @@
         "/api/ads/my":{
             "get":{
                 "summary": "Get my advertisments",
-                "description":"Get advertisments of currently logged in user.",
+                "description":"Get advertisments of currently logged-in user.",
                 "tags": ["Advertisments"],
                 "responses": {
                     "200":{
@@ -220,7 +307,7 @@
                         }
                     },
                     "401":{
-                        "description": "Unauthorized. Nobody is logged in.",
+                        "description": "Unauthorized. Nobody is logged-in.",
                         "content":{
                             "application/json":{
                                 "schema":{
@@ -296,7 +383,7 @@
                         }
                     },
                     "401":{
-                        "description": "Unauthorized. Nobody is logged in.",
+                        "description": "Unauthorized. Nobody is logged-in.",
                         "content":{
                             "application/json":{
                                 "schema":{
@@ -317,6 +404,90 @@
             }
         },
         "/api/ads/{adId}":{
+            "get":{
+                "tags": ["Advertisments"],
+                "parameters": [
+                    {
+                        "name": "adId",
+                        "description": "Id of advertisment that needs to be updated",
+                        "in": "path",
+                        "required": true,
+                        "schema":{
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "summary": "Get advertisment by id",
+                "responses": {
+                    "200":{
+                        "description": "Successful response",
+                        "content": {
+                            "application/json":{
+                                "schema":{
+                                    "type": "array",
+                                    "items":{
+                                        "type": "object",
+                                        "required": ["id","adCategory","area","price","description","owner"],
+                                        "properties": {
+                                            "id":{
+                                                "type": "integer",
+                                                "example":1
+                                            },
+                                            "adCategory":{
+                                                "type": "string",
+                                                "example":"RENT"
+                                            },
+                                            "area":{
+                                                "type": "number",
+                                                "example":100
+                                            },
+                                            "price":{
+                                                "type": "number",
+                                                "example":1000
+                                            },  
+                                            "description":{
+                                                "type": "string",
+                                                "example":"desctiption"
+                                            },
+                                            "owner":{
+                                                "type": "object",
+                                                "required": ["username","name"],
+                                                "properties": {
+                                                    "username":{
+                                                        "type": "string",
+                                                        "example":"user1"
+                                                    },
+                                                    "name":{
+                                                        "type": "string",
+                                                        "example":"Firstname Lastname"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404":{
+                        "description": "Not found",
+                        "content": {
+                            "application/json":{
+                                "schema":{
+                                    "type": "object",
+                                    "required":["message"],
+                                    "properties": {
+                                        "message":{
+                                            "type": "string",
+                                            "example":"message"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
             "patch":{
                 "tags": ["Advertisments"],
                 "parameters": [
@@ -403,7 +574,7 @@
                         }
                     },
                     "401":{
-                        "description": "Unauthorized. Nobody is logged in.",
+                        "description": "Unauthorized. Nobody is logged-in.",
                         "content":{
                             "application/json":{
                                 "schema":{
@@ -489,7 +660,7 @@
                         }
                     },
                     "401":{
-                        "description": "Unauthorized. Nobody is logged in.",
+                        "description": "Unauthorized. Nobody is logged-in.",
                         "content":{
                             "application/json":{
                                 "schema":{
@@ -542,8 +713,662 @@
                 },
                 "security": [{"bearerAuth":[]}]
             }
+        },
+        "/api/ad_category":{
+            "get":{
+                "tags": ["Adveritisment's categories"],
+                "summary": "Get adveritisment's categories",
+                "responses": {
+                    "200":{
+                        "description": "Successful response",
+                        "content": {
+                            "application/json":{
+                                "schema":{
+                                    "type": "array",
+                                    "items":{
+                                        "type": "object",
+                                        "properties": {
+                                            "id":{
+                                                "type": "integer"
+                                            },
+                                            "title":{
+                                                "type": "string"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/sightseeing/user":{
+            "get":{
+                "tags": ["Sightseeing"],
+                "summary":"Get sightseeings which logged-in user requested",
+                "responses": {
+                    "200":{
+                        "description": "Successful response",
+                        "content": {
+                            "application/json":{
+                                "schema":{
+                                    "type": "array",
+                                    "items":{
+                                        "type": "object",
+                                        "required": ["id","ad","accepted","time","mark","comment"],
+                                        "properties": {
+                                            "id":{
+                                                "type": "integer"
+                                            },
+                                            "ad":{
+                                                "type": "object",
+                                                "required": ["id","adCategory","area","price","description"],
+                                                "properties": {
+                                                    "id":{
+                                                        "type": "integer",
+                                                        "example":1
+                                                    },
+                                                    "adCategory":{
+                                                        "type": "string",
+                                                        "example":"RENT"
+                                                    },
+                                                    "area":{
+                                                        "type": "number",
+                                                        "example":100
+                                                    },
+                                                    "price":{
+                                                        "type": "number",
+                                                        "example":1000
+                                                    },
+                                                    "description":{
+                                                        "type": "string",
+                                                        "example":"desctiption"
+                                                    }
+                                                }
+                                            },
+                                            "accepted":{
+                                                "type": "boolean"
+                                            },
+                                            "time":{
+                                                "type": "string",
+                                                "example":"2022-08-18 10:15:16"
+                                            },
+                                            "mark":{
+                                                "type": "integer"
+                                            },
+                                            "comment":{
+                                                "type": "string"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [{"bearerAuth":[]}]
+            }
+        },
+        "/api/sightseeing/owner":{
+            "get":{
+                "tags": ["Sightseeing"],
+                "summary":"Get sightseeings which logged-in user created",
+                "responses": {
+                    "200":{
+                        "description": "Successful response",
+                        "content": {
+                            "application/json":{
+                                "schema":{
+                                    "type": "array",
+                                    "items":{
+                                        "type": "object",
+                                        "required": ["id","ad","accepted","time","mark","comment","user"],
+                                        "properties": {
+                                            "id":{
+                                                "type": "integer"
+                                            },
+                                            "user":{
+                                                "type": "object",
+                                                "required": ["username","name"],
+                                                "properties": {
+                                                    "username":{
+                                                        "type": "string"
+                                                    },
+                                                    "name":{
+                                                        "type": "string"
+                                                    }
+                                                }
+                                            },
+                                            "ad":{
+                                                "type": "object",
+                                                "required": ["id","adCategory","area","price","description"],
+                                                "properties": {
+                                                    "id":{
+                                                        "type": "integer",
+                                                        "example":1
+                                                    },
+                                                    "adCategory":{
+                                                        "type": "string",
+                                                        "example":"RENT"
+                                                    },
+                                                    "area":{
+                                                        "type": "number",
+                                                        "example":100
+                                                    },
+                                                    "price":{
+                                                        "type": "number",
+                                                        "example":1000
+                                                    },
+                                                    "description":{
+                                                        "type": "string",
+                                                        "example":"desctiption"
+                                                    }
+                                                }
+                                            },
+                                            "accepted":{
+                                                "type": "boolean"
+                                            },
+                                            "time":{
+                                                "type": "string",
+                                                "example":"2022-08-18 10:15:16"
+                                            },
+                                            "mark":{
+                                                "type": "integer"
+                                            },
+                                            "comment":{
+                                                "type": "string"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [{"bearerAuth":[]}]
+            }
+        },
+        "/api/sightseeing/request":{
+            "post":{
+                "summary": "Request sightseeing",
+                "tags": ["Sightseeing"],
+                "requestBody":{
+                    "required": true,
+                    "content": {
+                        "application/json":{
+                            "schema":{
+                                "type": "object",
+                                "required": ["adId","time"],
+                                "properties": {
+                                    "adId":{
+                                        "type": "integer"
+                                    },
+                                    "time":{
+                                        "type": "string",
+                                        "example":"2022-08-18 10:15:16"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201":{
+                        "description": "Successful response",
+                        "content":{
+                            "application/json":{
+                                "schema":{
+                                    "type": "object",
+                                        "required":["message"],
+                                        "properties": {
+                                            "message":{
+                                                "type": "string"
+                                            }
+                                        }
+                                }
+                            }
+                        }
+                    },
+                    "400":{
+                        "description": "Bad request",
+                        "content":{
+                            "application/json":{
+                                "schema":{
+                                    "type": "object",
+                                        "required":["message"],
+                                        "properties": {
+                                            "message":{
+                                                "type": "string"
+                                            }
+                                        }
+                                }
+                            }
+                        }
+                    },
+                    "401":{
+                        "description": "Unauthorized. Token missing.",
+                        "content":{
+                            "application/json":{
+                                "schema":{
+                                    "type": "object",
+                                        "required":["message"],
+                                        "properties": {
+                                            "message":{
+                                                "type": "string"
+                                            }
+                                        }
+                                }
+                            }
+                        }
+                    },
+                    "403":{
+                        "description": "Forbidden",
+                        "content":{
+                            "application/json":{
+                                "schema":{
+                                    "type": "object",
+                                        "required":["message"],
+                                        "properties": {
+                                            "message":{
+                                                "type": "string"
+                                            }
+                                        }
+                                }
+                            }
+                        }
+                    },
+                    "404":{
+                        "description": "Not found",
+                        "content":{
+                            "application/json":{
+                                "schema":{
+                                    "type": "object",
+                                        "required":["message"],
+                                        "properties": {
+                                            "message":{
+                                                "type": "string"
+                                            }
+                                        }
+                                }
+                            }
+                        }
+                    },
+                    "409":{
+                        "description": "You cannot do that",
+                        "content":{
+                            "application/json":{
+                                "schema":{
+                                    "type": "object",
+                                        "required":["message"],
+                                        "properties": {
+                                            "message":{
+                                                "type": "string"
+                                            }
+                                        }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [{"bearerAuth":[]}]
+            }
+        },
+        "/api/sightseeing/accept/{sightseeingId}":{
+            "patch":{
+                "summary": "Accept sightseeing",
+                "tags": ["Sightseeing"],
+                "parameters": [
+                    {
+                        "name": "sightseeingId",
+                        "description": "Id of sightseeing that needs to be accepted",
+                        "in": "path",
+                        "required": true,
+                        "schema":{
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200":{
+                        "description": "Successful response",
+                        "content":{
+                            "application/json":{
+                                "schema":{
+                                    "type": "object",
+                                        "required":["message"],
+                                        "properties": {
+                                            "message":{
+                                                "type": "string",
+                                                "default":"Accepted"
+                                            }
+                                        }
+                                }
+                            }
+                        }
+                    },
+                    "401":{
+                        "description": "Unauthorized. Token missing.",
+                        "content":{
+                            "application/json":{
+                                "schema":{
+                                    "type": "object",
+                                        "required":["message"],
+                                        "properties": {
+                                            "message":{
+                                                "type": "string"
+                                            }
+                                        }
+                                }
+                            }
+                        }
+                    },
+                    "403":{
+                        "description": "Forbidden",
+                        "content":{
+                            "application/json":{
+                                "schema":{
+                                    "type": "object",
+                                        "required":["message"],
+                                        "properties": {
+                                            "message":{
+                                                "type": "string"
+                                            }
+                                        }
+                                }
+                            }
+                        }
+                    },
+                    "404":{
+                        "description": "Not found",
+                        "content":{
+                            "application/json":{
+                                "schema":{
+                                    "type": "object",
+                                        "required":["message"],
+                                        "properties": {
+                                            "message":{
+                                                "type": "string"
+                                            }
+                                        }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/sightseeing/reject/{sightseeingId}":{
+            "patch":{
+                "summary": "Reject sightseeing",
+                "tags": ["Sightseeing"],
+                "parameters": [
+                    {
+                        "name": "sightseeingId",
+                        "description": "Id of sightseeing that needs to be rejected",
+                        "in": "path",
+                        "required": true,
+                        "schema":{
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200":{
+                        "description": "Successful response",
+                        "content":{
+                            "application/json":{
+                                "schema":{
+                                    "type": "object",
+                                        "required":["message"],
+                                        "properties": {
+                                            "message":{
+                                                "type": "string",
+                                                "default":"Rejected"
+                                            }
+                                        }
+                                }
+                            }
+                        }
+                    },
+                    "401":{
+                        "description": "Unauthorized. Token missing.",
+                        "content":{
+                            "application/json":{
+                                "schema":{
+                                    "type": "object",
+                                        "required":["message"],
+                                        "properties": {
+                                            "message":{
+                                                "type": "string"
+                                            }
+                                        }
+                                }
+                            }
+                        }
+                    },
+                    "403":{
+                        "description": "Forbidden",
+                        "content":{
+                            "application/json":{
+                                "schema":{
+                                    "type": "object",
+                                        "required":["message"],
+                                        "properties": {
+                                            "message":{
+                                                "type": "string"
+                                            }
+                                        }
+                                }
+                            }
+                        }
+                    },
+                    "404":{
+                        "description": "Not found",
+                        "content":{
+                            "application/json":{
+                                "schema":{
+                                    "type": "object",
+                                        "required":["message"],
+                                        "properties": {
+                                            "message":{
+                                                "type": "string"
+                                            }
+                                        }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/sightseeing/mark_and_comment/{sightseeingId}":{
+            "patch":{
+                "summary": "Mark and comment sightseeing",
+                "tags": ["Sightseeing"],
+                "parameters": [
+                    {
+                        "name": "sightseeingId",
+                        "description": "Id of sightseeing that needs to be marked and commented",
+                        "in": "path",
+                        "required": true,
+                        "schema":{
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody":{
+                    "required": true,
+                    "content": {
+                        "application/json":{
+                            "schema":{
+                                "type": "object",
+                                "required": ["mark","comment"],
+                                "properties": {
+                                    "mark":{
+                                        "type": "integer"
+                                    },
+                                    "comment":{
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200":{
+                        "description": "Successful response",
+                        "content":{
+                            "application/json":{
+                                "schema":{
+                                    "type": "object",
+                                        "required":["message"],
+                                        "properties": {
+                                            "message":{
+                                                "type": "string",
+                                                "default":"User gave mark and comment."
+                                            }
+                                        }
+                                }
+                            }
+                        }
+                    },
+                    "401":{
+                        "description": "Unauthorized. Token missing.",
+                        "content":{
+                            "application/json":{
+                                "schema":{
+                                    "type": "object",
+                                        "required":["message"],
+                                        "properties": {
+                                            "message":{
+                                                "type": "string"
+                                            }
+                                        }
+                                }
+                            }
+                        }
+                    },
+                    "403":{
+                        "description": "Forbidden",
+                        "content":{
+                            "application/json":{
+                                "schema":{
+                                    "type": "object",
+                                        "required":["message"],
+                                        "properties": {
+                                            "message":{
+                                                "type": "string"
+                                            }
+                                        }
+                                }
+                            }
+                        }
+                    },
+                    "404":{
+                        "description": "Not found",
+                        "content":{
+                            "application/json":{
+                                "schema":{
+                                    "type": "object",
+                                        "required":["message"],
+                                        "properties": {
+                                            "message":{
+                                                "type": "string"
+                                            }
+                                        }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/sightseeing/{sightseeingId}":{
+            "delete":{
+                "summary": "Delete sightseeing",
+                "tags": ["Sightseeing"],
+                "parameters": [
+                    {
+                        "name": "sightseeingId",
+                        "description": "Id of sightseeing that needs to be deleted",
+                        "in": "path",
+                        "required": true,
+                        "schema":{
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200":{
+                        "description": "Successful response",
+                        "content":{
+                            "application/json":{
+                                "schema":{
+                                    "type": "object",
+                                        "required":["message"],
+                                        "properties": {
+                                            "message":{
+                                                "type": "string",
+                                                "default":"Deleted"
+                                            }
+                                        }
+                                }
+                            }
+                        }
+                    },
+                    "401":{
+                        "description": "Unauthorized. Token missing.",
+                        "content":{
+                            "application/json":{
+                                "schema":{
+                                    "type": "object",
+                                        "required":["message"],
+                                        "properties": {
+                                            "message":{
+                                                "type": "string"
+                                            }
+                                        }
+                                }
+                            }
+                        }
+                    },
+                    "403":{
+                        "description": "Forbidden",
+                        "content":{
+                            "application/json":{
+                                "schema":{
+                                    "type": "object",
+                                        "required":["message"],
+                                        "properties": {
+                                            "message":{
+                                                "type": "string"
+                                            }
+                                        }
+                                }
+                            }
+                        }
+                    },
+                    "404":{
+                        "description": "Not found",
+                        "content":{
+                            "application/json":{
+                                "schema":{
+                                    "type": "object",
+                                        "required":["message"],
+                                        "properties": {
+                                            "message":{
+                                                "type": "string"
+                                            }
+                                        }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
-
     },
     "components": {
         "securitySchemes": {

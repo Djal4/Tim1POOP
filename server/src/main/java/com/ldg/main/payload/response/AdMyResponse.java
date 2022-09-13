@@ -7,7 +7,7 @@ public class AdMyResponse {
     public long id;
     // public AdCategory adCategory;
     public String adCategory;
-    // private long location;
+    // private long city;
     public float area;
     public float price;
     public String description;

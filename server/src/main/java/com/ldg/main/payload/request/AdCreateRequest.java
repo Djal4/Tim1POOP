@@ -45,15 +45,15 @@ public class AdCreateRequest {
         this.ownerId = ownerId;
     }
 
-    // Location data
+    // City data
     @Nullable
-    private long locationId = 1;
+    private long cityId = 1;
 
-    public long getLocationId() {
-        return locationId;
+    public long getCityId() {
+        return cityId;
     }
 
-    public void setLocationId(long locationId) {
-        this.locationId = locationId;
+    public void setCityId(long cityId) {
+        this.cityId = cityId;
     }
 }
