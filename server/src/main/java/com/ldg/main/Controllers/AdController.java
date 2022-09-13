@@ -33,6 +33,9 @@ public class AdController {
     @Autowired
     UserRepository userRepository;
 
+    @Autowired
+    RoleRepository roleRepository;
+
     // Public route
     @GetMapping
     public ResponseEntity<?> getAll() {
@@ -103,7 +106,9 @@ public class AdController {
         Ad ad = opt.get();
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         UserDetailsImpl user = (UserDetailsImpl) auth.getPrincipal();
-        if (ad.getOwnerId() != user.getID())
+        Role ADMIN_ROLE = roleRepository.findByTitle("ADMIN");
+        long userRoleId = userRepository.findById(user.getID()).get().getRoleID();
+        if (ad.getOwnerId() != user.getID() || userRoleId != ADMIN_ROLE.getId())
             throw new HttpStatusCodeException(HttpStatus.FORBIDDEN,
                     "You can\'t delete this advertisment because you aren\'t owner");
         adRepository.deleteById(id);

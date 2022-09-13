@@ -26,7 +26,7 @@ public class User {
     private String lastname;
 
     @Column(name = "role_id")
-    private int role_id = 0;
+    private long role_id = 0;
 
     @Column(name = "image_path")
     private String path = "";
@@ -82,11 +82,11 @@ public class User {
         return this.lastname;
     }
 
-    public void setRoleID(int role_id) {
+    public void setRoleID(long role_id) {
         this.role_id = role_id;
     }
 
-    public int getRoleID() {
+    public long getRoleID() {
         return this.role_id;
     }
 
