@@ -14,8 +14,6 @@ import com.ldg.main.Repository.*;
 import com.ldg.main.Services.AdService;
 import com.ldg.main.exceptions.HttpStatusCodeException;
 import com.ldg.main.payload.request.AdCreateRequest;
-import com.ldg.main.payload.response.AdMyResponse;
-import com.ldg.main.payload.response.AdResponse;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -35,21 +33,10 @@ public class AdController {
     @Autowired
     UserRepository userRepository;
 
-    private AdResponse createAdResponse(Ad ad) {
-        AdCategory adCategory = adCategoryRepository.findById(ad.getAdCategoryId()).get();
-        User owner = userRepository.findById(ad.getOwnerId()).get();
-        return new AdResponse(ad, adCategory, owner);
-    }
-
     // Public route
     @GetMapping
     public ResponseEntity<?> getAll() {
-        List<Ad> ads = adService.findAll();
-        List<AdResponse> adResponses = new ArrayList<>();
-        for (Ad ad : ads) {
-            adResponses.add(createAdResponse(ad));
-        }
-        return ResponseEntity.ok(adResponses);
+        return ResponseEntity.ok(adService.createAdResponseList(adService.findAll()));
     }
 
     // Public route
@@ -58,7 +45,7 @@ public class AdController {
         Optional<Ad> optionalAd = adRepository.findById(id);
         if (optionalAd.isPresent()) {
             Ad ad = optionalAd.get();
-            return ResponseEntity.ok(createAdResponse(ad));
+            return ResponseEntity.ok(adService.createAdResponse(ad));
         }
         throw new HttpStatusCodeException(HttpStatus.NOT_FOUND, "Advertisment with id " + id + " not exists!");
     }
@@ -67,26 +54,16 @@ public class AdController {
     public ResponseEntity<?> myAds() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         UserDetailsImpl user = (UserDetailsImpl) auth.getPrincipal();
-        List<Ad> ads = adRepository.findMyAds(user.getID());
-        List<AdMyResponse> adResponses = new ArrayList<>();
-        for (Ad ad : ads) {
-            AdCategory adCategory = adCategoryRepository.findById(ad.getAdCategoryId()).get();
-            AdMyResponse my = new AdMyResponse(ad, adCategory);
-            adResponses.add(my);
-        }
-        return ResponseEntity.status(HttpStatus.OK).body(adResponses);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(adService.createAdMyResponseList(adService.findMyAds(user.getID())));
     }
 
     @GetMapping("/other")
     public ResponseEntity<?> otherAds() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         UserDetailsImpl user = (UserDetailsImpl) auth.getPrincipal();
-        List<Ad> ads = adRepository.findOtherAds(user.getID());
-        List<AdResponse> adResponses = new ArrayList<>();
-        for (Ad ad : ads) {
-            adResponses.add(createAdResponse(ad));
-        }
-        return ResponseEntity.status(HttpStatus.OK).body(adResponses);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(adService.createAdResponseList(adService.findOtherAds(user.getID())));
     }
 
     @PostMapping

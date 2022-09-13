@@ -46,8 +46,8 @@ public class AdCreateRequest {
     }
 
     // City data
-    @Nullable
-    private long cityId = 1;
+    @Min(0)
+    private long cityId;
 
     public long getCityId() {
         return cityId;

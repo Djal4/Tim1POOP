@@ -11,17 +11,21 @@ public class AdMyResponse {
     public float area;
     public float price;
     public String description;
+    public String city;
+    public String country;
 
     public AdMyResponse() {
     }
 
     // public AdResponse(Ad ad, AdCategory adCategory, User owner) {
-    public AdMyResponse(Ad ad, AdCategory adCategory) {
+    public AdMyResponse(Ad ad, AdCategory adCategory, City city, Country country) {
         this.id = ad.getId();
         this.area = ad.getArea();
         this.price = ad.getPrice();
         this.description = ad.getDescription();
         // this.adCategory = adCategory;
         this.adCategory = adCategory.getTitle();
+        this.city = city.getName();
+        this.country = country.getName();
     }
 }

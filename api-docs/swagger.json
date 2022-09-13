@@ -19,6 +19,9 @@
         },
         {
             "name": "Sightseeing"
+        },
+        {
+            "name": "Country"
         }
     ],
     "servers": [
@@ -125,7 +128,7 @@
                                     "type": "array",
                                     "items":{
                                         "type": "object",
-                                        "required": ["id","adCategory","area","price","description","owner"],
+                                        "required": ["id","adCategory","area","price","description","owner","city","country"],
                                         "properties": {
                                             "id":{
                                                 "type": "integer",
@@ -146,6 +149,12 @@
                                             "description":{
                                                 "type": "string",
                                                 "example":"desctiption"
+                                            },
+                                            "city":{
+                                                "type": "string"
+                                            },
+                                            "country":{
+                                                "type": "string"
                                             },
                                             "owner":{
                                                 "type": "object",
@@ -178,7 +187,7 @@
                         "application/json":{
                             "schema":{
                                 "type": "object",
-                                "required": ["adCategoryId","area","price"],
+                                "required": ["adCategoryId","area","price","cityId"],
                                 "properties": {
                                     "adCategoryId":{
                                         "type": "integer",
@@ -191,6 +200,9 @@
                                     "price":{
                                         "type": "number",
                                         "example":1000
+                                    },
+                                    "cityId":{
+                                        "type": "integer"
                                     },
                                     "description":{
                                         "type": "string",
@@ -299,6 +311,12 @@
                                             "description":{
                                                 "type": "string",
                                                 "example":"desctiption"
+                                            },
+                                            "city":{
+                                                "type": "string"
+                                            },
+                                            "country":{
+                                                "type": "string"
                                             }
                                         }
                                     }
@@ -340,7 +358,7 @@
                                     "type": "array",
                                     "items":{
                                         "type": "object",
-                                        "required": ["id","adCategory","area","price","description","owner"],
+                                        "required": ["id","adCategory","area","price","description","owner","city","country"],
                                         "properties": {
                                             "id":{
                                                 "type": "integer",
@@ -361,6 +379,12 @@
                                             "description":{
                                                 "type": "string",
                                                 "example":"desctiption"
+                                            },
+                                            "city":{
+                                                "type": "string"
+                                            },
+                                            "country":{
+                                                "type": "string"
                                             },
                                             "owner":{
                                                 "type": "object",
@@ -427,7 +451,7 @@
                                     "type": "array",
                                     "items":{
                                         "type": "object",
-                                        "required": ["id","adCategory","area","price","description","owner"],
+                                        "required": ["id","adCategory","area","price","description","owner","city","country"],
                                         "properties": {
                                             "id":{
                                                 "type": "integer",
@@ -448,6 +472,12 @@
                                             "description":{
                                                 "type": "string",
                                                 "example":"desctiption"
+                                            },
+                                            "city":{
+                                                "type": "string"
+                                            },
+                                            "country":{
+                                                "type": "string"
                                             },
                                             "owner":{
                                                 "type": "object",
@@ -508,7 +538,7 @@
                         "application/json":{
                             "schema":{
                                 "type": "object",
-                                "required": ["adCategoryId","area","price"],
+                                "required": ["adCategoryId","area","price","cityId"],
                                 "properties": {
                                     "adCategoryId":{
                                         "type": "integer",
@@ -521,6 +551,9 @@
                                     "price":{
                                         "type": "number",
                                         "example":1000
+                                    },
+                                    "cityId":{
+                                        "type": "integer"
                                     },
                                     "description":{
                                         "type": "string",
@@ -565,6 +598,10 @@
                                             "example":"Error"
                                         },
                                         "price":{
+                                            "type": "string",
+                                            "example":"Error"
+                                        },
+                                        "cityId":{
                                             "type": "string",
                                             "example":"Error"
                                         }
@@ -1362,6 +1399,51 @@
                                                 "type": "string"
                                             }
                                         }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/country":{
+            "get":{
+                "tags": ["Country"],
+                "summary":"Get countries and cities",
+                "responses": {
+                    "200":{
+                        "description": "Successful response",
+                        "content": {
+                            "application/json":{
+                                "schema":{
+                                    "type": "array",
+                                    "items":{
+                                        "type": "object",
+                                        "required": ["id","name","cities"],
+                                        "properties": {
+                                            "id":{
+                                                "type": "integer"
+                                            },
+                                            "name":{
+                                                "type": "string"
+                                            },
+                                            "countries":{
+                                                "type": "array",
+                                                "items":{
+                                                    "type": "object",
+                                                    "required": ["id","name"],
+                                                    "properties": {
+                                                        "id":{
+                                                            "type": "integer"
+                                                        },
+                                                        "name":{
+                                                            "type": "string"
+                                                        }
+                                                    }
+                                                }    
+                                            }
+                                        }   
+                                    }
                                 }
                             }
                         }

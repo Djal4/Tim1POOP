@@ -16,7 +16,7 @@ public class Ad {
     private long id;
 
     @Column(name = "advertisment_category_id")
-    private long adCategoryId = -1;
+    private long adCategoryId;
     // @ManyToOne(cascade = CascadeType.ALL)
     // @JoinColumn(name = "advertisment_category_id", referencedColumnName = "id")
     // private AdCategory adCategory;
@@ -30,16 +30,16 @@ public class Ad {
     // }
 
     @Column(name = "owner_id")
-    private long ownerId = -1;
+    private long ownerId;
 
     @Column(name = "city_id")
-    private long cityId = 1;
+    private long cityId;
 
     @Column(name = "area")
-    private float area = -1;
+    private float area;
 
     @Column(name = "price")
-    private float price = -1;
+    private float price;
 
     @Nullable()
     @Column(name = "description")

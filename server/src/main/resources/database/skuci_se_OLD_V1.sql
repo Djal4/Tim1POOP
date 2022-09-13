@@ -2,10 +2,10 @@
 -- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost
--- Generation Time: Sep 12, 2022 at 04:18 PM
+-- Host: 127.0.0.1
+-- Generation Time: Sep 11, 2022 at 09:24 PM
 -- Server version: 10.4.24-MariaDB
--- PHP Version: 8.1.6
+-- PHP Version: 7.4.29
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -62,7 +62,7 @@ CREATE TABLE `advertisments` (
   `advertisment_category_id` int(11) NOT NULL,
   `owner_id` int(11) NOT NULL,
   `description` text COLLATE utf8_unicode_ci DEFAULT NULL,
-  `city_id` int(11) NOT NULL,
+  `location_id` int(11) NOT NULL,
   `price` float NOT NULL,
   `area` float NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -71,7 +71,7 @@ CREATE TABLE `advertisments` (
 -- Dumping data for table `advertisments`
 --
 
-INSERT INTO `advertisments` (`id`, `advertisment_category_id`, `owner_id`, `description`, `city_id`, `price`, `area`) VALUES
+INSERT INTO `advertisments` (`id`, `advertisment_category_id`, `owner_id`, `description`, `location_id`, `price`, `area`) VALUES
 (4, 1, 1, '', 1, 20, 10),
 (5, 2, 2, 'Korisnik ad updated', 1, 2000, 10);
 
@@ -93,71 +93,6 @@ CREATE TABLE `advertisment_categories` (
 INSERT INTO `advertisment_categories` (`id`, `title`) VALUES
 (1, 'RENT'),
 (2, 'SELL');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `cities`
---
-
-CREATE TABLE `cities` (
-  `id` int(11) NOT NULL,
-  `name` varchar(30) CHARACTER SET utf8 NOT NULL,
-  `country_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `cities`
---
-
-INSERT INTO `cities` (`id`, `name`, `country_id`) VALUES
-(1, 'Beograd', 1),
-(2, 'Novi Sad', 1),
-(3, 'Niš', 1),
-(4, 'Kragujevac', 1),
-(5, 'Priština', 1),
-(6, 'Subotica', 1),
-(7, 'Zrenjanin', 1),
-(8, 'Pančevo', 1),
-(9, 'Čačak', 1),
-(10, 'Kruševac', 1),
-(11, 'Kraljevo', 1),
-(12, 'Novi Pazar', 1),
-(13, 'Smederevo', 1),
-(14, 'Leskovac', 1),
-(15, 'Užice', 1),
-(16, 'Vranje', 1),
-(17, 'Valjevo', 1),
-(18, 'Šabac', 1),
-(19, 'Sombor', 1),
-(20, 'Požarevac', 1),
-(21, 'Pirot', 1),
-(22, 'Zaječar', 1),
-(23, 'Kikinda', 1),
-(24, 'Sremska Mitrovica', 1),
-(25, 'Jagodina', 1),
-(26, 'Vršac', 1),
-(27, 'Bor', 1),
-(28, 'Prokuplje', 1),
-(29, 'Loznica', 1);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `countries`
---
-
-CREATE TABLE `countries` (
-  `id` int(11) NOT NULL,
-  `name` varchar(56) CHARACTER SET utf8 NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `countries`
---
-
-INSERT INTO `countries` (`id`, `name`) VALUES
-(1, 'Serbia');
 
 -- --------------------------------------------------------
 
@@ -186,6 +121,27 @@ CREATE TABLE `likes` (
   `user_id` int(11) NOT NULL,
   `advertisment_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `locations`
+--
+
+CREATE TABLE `locations` (
+  `id` int(11) NOT NULL,
+  `city` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+  `street` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+  `flat_number` varchar(10) COLLATE utf8_unicode_ci NOT NULL,
+  `country` varchar(30) COLLATE utf8_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Dumping data for table `locations`
+--
+
+INSERT INTO `locations` (`id`, `city`, `street`, `flat_number`, `country`) VALUES
+(1, 'Kragujevac', 'Ulica', '11/10', 'Srbija');
 
 -- --------------------------------------------------------
 
@@ -230,7 +186,7 @@ INSERT INTO `sightseeing` (`id`, `user_id`, `advertisment_id`, `accepted`, `time
 (4, 1, 4, 1, '2022-09-11 16:50:44', 0, NULL),
 (12, 2, 4, 1, '2026-08-18 10:15:16', 0, NULL),
 (13, 2, 4, 0, '2026-08-18 10:15:16', 0, NULL),
-(14, 2, 4, 0, '2026-08-18 10:15:16', 1, 'aa');
+(14, 2, 4, NULL, '2026-08-18 10:15:16', 0, NULL);
 
 -- --------------------------------------------------------
 
@@ -268,7 +224,7 @@ ALTER TABLE `advertisments`
   ADD PRIMARY KEY (`id`),
   ADD KEY `fk_advertisment_category` (`advertisment_category_id`),
   ADD KEY `fk_owner` (`owner_id`),
-  ADD KEY `fk_city` (`city_id`);
+  ADD KEY `fk_location` (`location_id`);
 
 --
 -- Indexes for table `advertisment_categories`
@@ -277,24 +233,17 @@ ALTER TABLE `advertisment_categories`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `cities`
---
-ALTER TABLE `cities`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `fk_counrty` (`country_id`);
-
---
--- Indexes for table `countries`
---
-ALTER TABLE `countries`
-  ADD PRIMARY KEY (`id`);
-
---
 -- Indexes for table `likes`
 --
 ALTER TABLE `likes`
   ADD PRIMARY KEY (`user_id`,`advertisment_id`),
   ADD KEY `fk_advertisment` (`advertisment_id`);
+
+--
+-- Indexes for table `locations`
+--
+ALTER TABLE `locations`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `roles`
@@ -335,15 +284,9 @@ ALTER TABLE `advertisment_categories`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT for table `cities`
+-- AUTO_INCREMENT for table `locations`
 --
-ALTER TABLE `cities`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
-
---
--- AUTO_INCREMENT for table `countries`
---
-ALTER TABLE `countries`
+ALTER TABLE `locations`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
@@ -373,14 +316,8 @@ ALTER TABLE `users`
 --
 ALTER TABLE `advertisments`
   ADD CONSTRAINT `fk_advertisment_category` FOREIGN KEY (`advertisment_category_id`) REFERENCES `advertisment_categories` (`id`),
-  ADD CONSTRAINT `fk_city` FOREIGN KEY (`city_id`) REFERENCES `cities` (`id`),
+  ADD CONSTRAINT `fk_location` FOREIGN KEY (`location_id`) REFERENCES `locations` (`id`),
   ADD CONSTRAINT `fk_owner` FOREIGN KEY (`owner_id`) REFERENCES `users` (`id`);
-
---
--- Constraints for table `cities`
---
-ALTER TABLE `cities`
-  ADD CONSTRAINT `fk_counrty` FOREIGN KEY (`country_id`) REFERENCES `countries` (`id`);
 
 --
 -- Constraints for table `likes`
