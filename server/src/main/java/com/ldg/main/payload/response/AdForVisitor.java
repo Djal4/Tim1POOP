@@ -2,8 +2,8 @@ package com.ldg.main.payload.response;
 
 import com.ldg.main.Models.*;
 
-public class AdMyResponse {
-
+public class AdForVisitor {
+    public UserShortView owner;
     public long id;
     // public AdCategory adCategory;
     public String adCategory;
@@ -13,14 +13,9 @@ public class AdMyResponse {
     public String description;
     public String city;
     public String country;
-    public boolean liked;
     public long numberOfLikes;
 
-    public AdMyResponse() {
-    }
-
-    // public AdResponse(Ad ad, AdCategory adCategory, User owner) {
-    public AdMyResponse(Ad ad, AdCategory adCategory, City city, Country country, boolean liked, long numberOfLikes) {
+    public AdForVisitor(Ad ad, AdCategory adCategory, User owner, City city, Country country, long numberOfLikes) {
         this.id = ad.getId();
         this.area = ad.getArea();
         this.price = ad.getPrice();
@@ -29,7 +24,7 @@ public class AdMyResponse {
         this.adCategory = adCategory.getTitle();
         this.city = city.getName();
         this.country = country.getName();
-        this.liked = liked;
+        this.owner = new UserShortView(owner);
         this.numberOfLikes = numberOfLikes;
     }
 }

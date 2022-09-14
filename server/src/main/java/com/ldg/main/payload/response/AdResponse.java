@@ -10,8 +10,9 @@ public class AdResponse extends AdMyResponse {
     }
 
     // public AdResponse(Ad ad, AdCategory adCategory, User owner) {
-    public AdResponse(Ad ad, AdCategory adCategory, User owner, City city, Country country) {
-        super(ad, adCategory, city, country);
+    public AdResponse(Ad ad, AdCategory adCategory, User owner, City city, Country country, boolean liked,
+            long numberOfLikes) {
+        super(ad, adCategory, city, country, liked, numberOfLikes);
         this.owner = new UserShortView(owner);
     }
 }

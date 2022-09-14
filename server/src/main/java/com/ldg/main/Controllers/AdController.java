@@ -39,7 +39,7 @@ public class AdController {
     // Public route
     @GetMapping
     public ResponseEntity<?> getAll() {
-        return ResponseEntity.ok(adService.createAdResponseList(adService.findAll()));
+        return ResponseEntity.ok(adService.createAdForVisitorResponseList());
     }
 
     // Public route
@@ -48,7 +48,7 @@ public class AdController {
         Optional<Ad> optionalAd = adRepository.findById(id);
         if (optionalAd.isPresent()) {
             Ad ad = optionalAd.get();
-            return ResponseEntity.ok(adService.createAdResponse(ad));
+            return ResponseEntity.ok(adService.createAdForVisitor(ad));
         }
         throw new HttpStatusCodeException(HttpStatus.NOT_FOUND, "Advertisment with id " + id + " not exists!");
     }
@@ -58,7 +58,7 @@ public class AdController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         UserDetailsImpl user = (UserDetailsImpl) auth.getPrincipal();
         return ResponseEntity.status(HttpStatus.OK)
-                .body(adService.createAdMyResponseList(adService.findMyAds(user.getID())));
+                .body(adService.createAdMyResponseList(adService.findMyAds(user.getID()), user.getID()));
     }
 
     @GetMapping("/other")
@@ -66,7 +66,7 @@ public class AdController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         UserDetailsImpl user = (UserDetailsImpl) auth.getPrincipal();
         return ResponseEntity.status(HttpStatus.OK)
-                .body(adService.createAdResponseList(adService.findOtherAds(user.getID())));
+                .body(adService.createAdResponseList(adService.findOtherAds(user.getID()), user.getID()));
     }
 
     @PostMapping
