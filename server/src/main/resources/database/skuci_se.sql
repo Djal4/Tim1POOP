@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Sep 12, 2022 at 04:18 PM
+-- Generation Time: Sep 14, 2022 at 04:26 PM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.1.6
 
@@ -28,6 +28,20 @@ DELIMITER $$
 --
 -- Procedures
 --
+CREATE DEFINER=`root`@`localhost` PROCEDURE `averageMark` (IN `AD_ID` INT)   BEGIN
+	SELECT CASE 
+    	WHEN AVG(1.0*s.mark) IS NULL THEN 0
+        ELSE AVG(1.0*s.mark)
+        END as `averageMark`
+    FROM sightseeing s
+    WHERE s.advertisment_id=AD_ID AND s.accepted=1 AND s.mark>0;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `findMarkedSightseeingByAdId` (IN `AD_ID` INT)   BEGIN
+	SELECT * FROM sightseeing s
+    WHERE s.accepted=1 AND s.advertisment_id=AD_ID AND s.mark>0;
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `findMyAds` (IN `ID` INT)   BEGIN
 	SET @id=ID;
 	SELECT * FROM advertisments ad WHERE ad.owner_id=@id; 
@@ -47,6 +61,29 @@ END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `findSightseeingByUserId` (IN `id` INT)   BEGIN
 SELECT * FROM sightseeing s WHERE s.user_id = id;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `numberOfLikes` (IN `AD_ID` INT)   BEGIN
+	SELECT COUNT(*) as numberOfLikes FROM likes WHERE advertisment_id=AD_ID;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `toogleLike` (IN `AD_ID` INT, IN `USER_ID` INT)   BEGIN
+	/*DECLARE @adId INT;
+    DECLARE @userId INT;*/
+	SET @adId=AD_ID;
+	SET @userId=USER_ID;
+    IF EXISTS(SELECT * FROM likes l WHERE l.user_id=@userId AND l.advertisment_id=@adId)
+    THEN 
+    	SELECT 0 as status;
+    	DELETE FROM likes WHERE user_id=@userId AND advertisment_id=@adId;
+    ELSE 
+    	INSERT INTO likes(user_id,advertisment_id) VALUES (@userId,@adId);
+    	SELECT 1 as status;
+    END IF;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `userLikedAd` (IN `AD_ID` INT, IN `USER_ID` INT)   BEGIN
+	SELECT COUNT(*) as liked FROM likes l WHERE l.user_id=USER_ID AND l.advertisment_id=AD_ID;
 END$$
 
 DELIMITER ;
@@ -187,6 +224,13 @@ CREATE TABLE `likes` (
   `advertisment_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+--
+-- Dumping data for table `likes`
+--
+
+INSERT INTO `likes` (`user_id`, `advertisment_id`) VALUES
+(1, 4);
+
 -- --------------------------------------------------------
 
 --
@@ -230,7 +274,7 @@ INSERT INTO `sightseeing` (`id`, `user_id`, `advertisment_id`, `accepted`, `time
 (4, 1, 4, 1, '2022-09-11 16:50:44', 0, NULL),
 (12, 2, 4, 1, '2026-08-18 10:15:16', 0, NULL),
 (13, 2, 4, 0, '2026-08-18 10:15:16', 0, NULL),
-(14, 2, 4, 0, '2026-08-18 10:15:16', 1, 'aa');
+(14, 2, 4, 1, '2026-08-18 10:15:16', 4, 'aa');
 
 -- --------------------------------------------------------
 
@@ -254,7 +298,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `firstname`, `lastname`, `image_id`, `image_path`, `role_id`, `username`, `password`) VALUES
-(1, 'Ime', 'Prezime', 1, 'nsn\'mdgdd', 1, 'user', '$2a$10$pTme2grcKbjhySjxx.24z.OJ2wwDSYuyj/WuaYofD3GVQaNRg9w.S'),
+(1, 'Ime', 'Prezime', 1, 'nsnmdgdd', 1, 'user', '$2a$10$pTme2grcKbjhySjxx.24z.OJ2wwDSYuyj/WuaYofD3GVQaNRg9w.S'),
 (2, 'Korisnik', 'Korisnik', 2, 'aaaa', 2, 'korisnik', '$2a$10$zlBFTWQtI7PwoUOOjQLbQu6v49caK2bipyONl5RT5bokqj1ejuk7u');
 
 --

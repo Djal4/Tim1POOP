@@ -1,6 +1,8 @@
 package com.ldg.main.Repository;
 
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -15,4 +17,7 @@ public interface AdRepository extends JpaRepository<Ad, Long> {
 
     @Query(value = "CALL findOtherAds(?1)", nativeQuery = true)
     public List<Ad> findOtherAds(long id);
+
+    @Query(value = "CALL averageMark(?1)", nativeQuery = true)
+    public Map<String, BigDecimal> averageMark(long id);
 }

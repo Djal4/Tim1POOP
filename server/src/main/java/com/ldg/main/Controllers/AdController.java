@@ -48,7 +48,19 @@ public class AdController {
         Optional<Ad> optionalAd = adRepository.findById(id);
         if (optionalAd.isPresent()) {
             Ad ad = optionalAd.get();
-            return ResponseEntity.ok(adService.createAdForVisitor(ad));
+            return ResponseEntity.ok(adService.getDetailed(ad));
+        }
+        throw new HttpStatusCodeException(HttpStatus.NOT_FOUND, "Advertisment with id " + id + " not exists!");
+    }
+
+    @GetMapping("/detailed/{id}")
+    public ResponseEntity<?> getDetailedForLoggedInUser(@PathVariable("id") long id) throws HttpStatusCodeException {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImpl user = (UserDetailsImpl) auth.getPrincipal();
+        Optional<Ad> optionalAd = adRepository.findById(id);
+        if (optionalAd.isPresent()) {
+            Ad ad = optionalAd.get();
+            return ResponseEntity.ok(adService.getDetailedLoggedIn(ad, user.getID()));
         }
         throw new HttpStatusCodeException(HttpStatus.NOT_FOUND, "Advertisment with id " + id + " not exists!");
     }

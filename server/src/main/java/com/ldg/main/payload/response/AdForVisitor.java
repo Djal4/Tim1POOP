@@ -14,6 +14,7 @@ public class AdForVisitor {
     public String city;
     public String country;
     public long numberOfLikes;
+    public float averageMark;
 
     public AdForVisitor(Ad ad, AdCategory adCategory, User owner, City city, Country country, long numberOfLikes) {
         this.id = ad.getId();

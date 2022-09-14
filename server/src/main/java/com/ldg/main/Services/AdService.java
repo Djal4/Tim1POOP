@@ -31,6 +31,9 @@ public class AdService {
     @Autowired
     LikeRepository likeRepository;
 
+    @Autowired
+    SightseeingRepository sightseeingRepository;
+
     public List<Ad> findAll() {
         return adRepository.findAll();
     }
@@ -43,14 +46,7 @@ public class AdService {
         return adRepository.findOtherAds(id);
     }
 
-    /*
-     * public SingleAdResponse createSingleAdResponse(Ad ad){
-     * AdCategory adCategory =
-     * adCategoryRepository.findById(ad.getAdCategoryId()).get();
-     * City city=cityRepository.findById(ad.getCityId()).get();
-     * Country country=countryRepository.findById(city.getCountryId()).get();
-     * }
-     */
+    // Ad response for logged-in user, other's ad
     public AdResponse createAdResponse(Ad ad, long userId) {
         AdCategory adCategory = adCategoryRepository.findById(ad.getAdCategoryId()).get();
         User owner = userRepository.findById(ad.getOwnerId()).get();
@@ -58,22 +54,28 @@ public class AdService {
         Country country = countryRepository.findById(city.getCountryId()).get();
         Map<String, BigInteger> numberOfLikes = likeRepository.numberOfLikes(ad.getId());
         Map<String, BigInteger> liked = likeRepository.userLikedAd(ad.getId(), userId);
-        return new AdResponse(ad, adCategory, owner, city, country,
+        AdResponse adResponse = new AdResponse(ad, adCategory, owner, city, country,
                 liked.get("liked").intValue() == 1,
                 numberOfLikes.get("numberOfLikes").intValue());
+        adResponse.averageMark = adRepository.averageMark(ad.getId()).get("averageMark").floatValue();
+        return adResponse;
     }
 
+    // Ad response for logged-in user, logged-in user is owner
     public AdMyResponse createAdMyResponse(Ad ad, long userId) {
         AdCategory adCategory = adCategoryRepository.findById(ad.getAdCategoryId()).get();
         City city = cityRepository.findById(ad.getCityId()).get();
         Country country = countryRepository.findById(city.getCountryId()).get();
         Map<String, BigInteger> numberOfLikes = likeRepository.numberOfLikes(ad.getId());
         Map<String, BigInteger> liked = likeRepository.userLikedAd(ad.getId(), userId);
-        return new AdMyResponse(ad, adCategory, city, country,
+        AdMyResponse adResponse = new AdMyResponse(ad, adCategory, city, country,
                 liked.get("liked").intValue() == 1,
                 numberOfLikes.get("numberOfLikes").intValue());
+        adResponse.averageMark = adRepository.averageMark(ad.getId()).get("averageMark").floatValue();
+        return adResponse;
     }
 
+    // Ad response for logged-in user, other's ad
     public List<AdResponse> createAdResponseList(List<Ad> ads, long userId) {
         List<AdResponse> adResponses = new ArrayList<>();
         for (Ad ad : ads) {
@@ -82,6 +84,7 @@ public class AdService {
         return adResponses;
     }
 
+    // Ad response for logged-in user, logged-in user is owner
     public List<AdMyResponse> createAdMyResponseList(List<Ad> ads, long userId) {
         List<AdMyResponse> adResponses = new ArrayList<>();
         for (Ad ad : ads) {
@@ -90,6 +93,7 @@ public class AdService {
         return adResponses;
     }
 
+    // Get ad, public route
     public AdForVisitor createAdForVisitor(Ad ad) {
         try {
             AdCategory adCategory = adCategoryRepository.findById(ad.getAdCategoryId()).get();
@@ -97,14 +101,17 @@ public class AdService {
             City city = cityRepository.findById(ad.getCityId()).get();
             Country country = countryRepository.findById(city.getCountryId()).get();
             Map<String, BigInteger> numberOfLikes = likeRepository.numberOfLikes(ad.getId());
-            return new AdForVisitor(ad, adCategory, owner, city, country,
+            AdForVisitor adResponse = new AdForVisitor(ad, adCategory, owner, city, country,
                     numberOfLikes.get("numberOfLikes").intValue()); // numberOfLikes.get("numberOfLikes").longValue());
+            adResponse.averageMark = adRepository.averageMark(ad.getId()).get("averageMark").floatValue();
+            return adResponse;
         } catch (Exception e) {
             System.out.println(e.getMessage());
             return null;
         }
     }
 
+    // Get ad, public route
     public List<AdForVisitor> createAdForVisitorResponseList() {
         List<Ad> ads = this.findAll();
         List<AdForVisitor> adResponses = new ArrayList<>();
@@ -126,5 +133,43 @@ public class AdService {
         ad.setPrice(adCreateRequest.getPrice());
         ad.setDescription(adCreateRequest.getDescription());
         adRepository.save(ad);
+    }
+
+    public AdDetailed getDetailed(Ad ad) {
+        AdCategory adCategory = adCategoryRepository.findById(ad.getAdCategoryId()).get();
+        User owner = userRepository.findById(ad.getOwnerId()).get();
+        City city = cityRepository.findById(ad.getCityId()).get();
+        Country country = countryRepository.findById(city.getCountryId()).get();
+        Map<String, BigInteger> numberOfLikes = likeRepository.numberOfLikes(ad.getId());
+        AdDetailed adDetailed = new AdDetailed(ad, adCategory, owner, city, country,
+                numberOfLikes.get("numberOfLikes").intValue());
+        List<Sightseeing> sightseeings = sightseeingRepository.findMarkedSightseeingByAdId(ad.getId());
+        for (Sightseeing sightseeing : sightseeings) {
+            UserShortView user = new UserShortView(userRepository.findById(sightseeing.getUserId()).get());
+            Comment comment = new Comment(sightseeing.getMark(), sightseeing.getComment(), user);
+            adDetailed.comments.add(comment);
+        }
+        adDetailed.averageMark = adRepository.averageMark(ad.getId()).get("averageMark").floatValue();
+        return adDetailed;
+    }
+
+    public AdDetailedLoggedIn getDetailedLoggedIn(Ad ad, long myId) {
+        AdCategory adCategory = adCategoryRepository.findById(ad.getAdCategoryId()).get();
+        User owner = userRepository.findById(ad.getOwnerId()).get();
+        City city = cityRepository.findById(ad.getCityId()).get();
+        Country country = countryRepository.findById(city.getCountryId()).get();
+        Map<String, BigInteger> numberOfLikes = likeRepository.numberOfLikes(ad.getId());
+        AdDetailedLoggedIn adDetailed = new AdDetailedLoggedIn(ad, adCategory, owner, city, country,
+                numberOfLikes.get("numberOfLikes").intValue());
+        adDetailed.myAd = ad.getOwnerId() == myId;
+        adDetailed.liked = likeRepository.userLikedAd(ad.getId(), myId).get("liked").intValue() == 1;
+        List<Sightseeing> sightseeings = sightseeingRepository.findMarkedSightseeingByAdId(ad.getId());
+        for (Sightseeing sightseeing : sightseeings) {
+            UserShortView user = new UserShortView(userRepository.findById(sightseeing.getUserId()).get());
+            Comment comment = new Comment(sightseeing.getMark(), sightseeing.getComment(), user);
+            adDetailed.comments.add(comment);
+        }
+        adDetailed.averageMark = adRepository.averageMark(ad.getId()).get("averageMark").floatValue();
+        return adDetailed;
     }
 }

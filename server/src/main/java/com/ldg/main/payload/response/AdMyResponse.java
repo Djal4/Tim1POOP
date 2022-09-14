@@ -15,6 +15,7 @@ public class AdMyResponse {
     public String country;
     public boolean liked;
     public long numberOfLikes;
+    public float averageMark;
 
     public AdMyResponse() {
     }

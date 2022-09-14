@@ -15,4 +15,7 @@ public interface SightseeingRepository extends JpaRepository<Sightseeing, Long> 
 
     @Query(value = "CALL findSightseeingByUserId(?1)", nativeQuery = true)
     public List<Sightseeing> findByUserId(long id);
+
+    @Query(value = "CALL findMarkedSightseeingByAdId(?1)", nativeQuery = true)
+    public List<Sightseeing> findMarkedSightseeingByAdId(long id);
 }

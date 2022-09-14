@@ -10,6 +10,7 @@ public class AdShortView {
     public float area;
     public float price;
     public String description;
+    public float averageMark;
 
     public AdShortView(Ad ad, AdCategory adCategory) {
         this.id = ad.getId();
