@@ -2,10 +2,14 @@ package com.ldg.main.Services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.ldg.main.Models.User;
 import com.ldg.main.Repository.UserRepository;
+import com.ldg.main.payload.request.RegisterRequest;
+
+import ch.qos.logback.core.encoder.Encoder;
 
 @Service
 public class UserService {
@@ -13,13 +17,23 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    private BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(10);
+    private User user;
 
-    public User saveUser(User user) {
-        user.setPassword(encoder.encode(user.getPassword()));
+    @Autowired
+    private PasswordEncoder encoder;
 
-        // return user;
+    public UserService()
+    {
+        user=new User();
+    }
 
+    public User saveUser(RegisterRequest request) {
+        user.setFirstname(request.getFirstName());
+        user.setLastname(request.getLastName());
+        user.setRoleID(1);
+        user.setPassword(encoder.encode(request.getPassword()));
+        user.setUsername(request.getUsername());
+        
         return userRepository.save(user);
     }
 
