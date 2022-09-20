@@ -1,0 +1,33 @@
+<div id="opis">
+  <h1>imiBooking-Online rezervacija smestaja u Srbiji bez troskova</h1>
+</div>
+ <div id="pocetnaBaner">
+  <img src='assets/slike/tradewar3-23.jpg' id="slika">
+ </div>
+
+ <div class="ad-container">
+  <div *ngFor="let ad of ads" class="ad">
+      <div class="header">
+          <h1>{{ad.adCategory}}</h1>
+          <h1 class="price">{{ad.price}}€</h1>
+          <h1 class="area">Povrsina: {{ad.area}}km2</h1>
+      </div>
+      <main>
+        <hr>
+        <p class="desc">Lorem ipsum dolor sit amet. Et voluptatem internos est quaerat ipsam est autem soluta et quisquam corporis et quia consequatur ab magni obcaecati et rerum molestiae? Qui ullam voluptatem a maxime molestiae quo consequuntur nisi sed magnam odit cum incidunt nihil sit quis reprehenderit? Sed itaque veritatis eos eius voluptatem sed labore nesciunt doloribus voluptatum aut dolore voluptas ut tempora dolore. Eum natus maxime sed animi dolores et dolore expedita non aliquam reiciendis ut nisi distinctio.
+
+            Qui accusantium reprehenderit quo aspernatur nobis et nostrum deleniti eos impedit exercitationem qui optio temporibus. Et voluptatum assumenda At adipisci esse ut nemo obcaecati qui tempora accusantium ea illo debitis ab nulla sequi id dolores asperiores.<p>
+        <hr>
+      </main>
+      <footer>
+          <p class="city">
+              {{ad.city}}
+          </p>
+          <h2 style="font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif; font-weight: bold;">Luka Jankovic</h2>
+          <button type="button" class="btn btn-info" style="margin-bottom: 10px; margin-left:750px;" (click)="showDetails(ad.id)">Prikazi detalje</button>
+        </footer>
+  </div>
+</div>
+<br/>
+
+ 
