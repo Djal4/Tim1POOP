@@ -1,5 +1,7 @@
 package com.ldg.main.Controllers;
 
+import java.util.Optional;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,13 +11,15 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ldg.main.Models.User;
 import com.ldg.main.Models.UserDetailsImpl;
-
+import com.ldg.main.Repository.UserRepository;
 import com.ldg.main.config.JwtTokenUtil;
 import com.ldg.main.exceptions.HttpStatusCodeException;
 import com.ldg.main.payload.request.JwtRequest;
@@ -28,6 +32,11 @@ public class AuthController {
     AuthenticationManager authManager;
     @Autowired
     JwtTokenUtil jwtUtil;
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private Optional<User> user;
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody @Valid JwtRequest request) throws HttpStatusCodeException {

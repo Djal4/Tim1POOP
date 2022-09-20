@@ -8,8 +8,10 @@ import org.springframework.stereotype.Service;
 import com.ldg.main.Models.User;
 import com.ldg.main.Repository.UserRepository;
 import com.ldg.main.payload.request.RegisterRequest;
-
-import ch.qos.logback.core.encoder.Encoder;
+import java.util.Optional;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import com.ldg.main.Models.UserDetailsImpl;
 
 @Service
 public class UserService {
@@ -18,7 +20,7 @@ public class UserService {
     private UserRepository userRepository;
 
     private User user;
-
+    private Optional<User> usr;
     @Autowired
     private PasswordEncoder encoder;
 
@@ -37,11 +39,11 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public User changePassword(User user, String oldPassword, String newPassword, String newPasswordConfirm) {
-        if (encoder.matches(oldPassword, user.getPassword())) {
+    public User changePassword(User usr, String oldPassword, String newPassword, String newPasswordConfirm) {
+        if (encoder.matches(oldPassword, usr.getPassword())) {
             if (newPassword.equals(newPasswordConfirm)) {
-                user.setPassword(encoder.encode(newPassword));
-                return user;// save
+                usr.setPassword(encoder.encode(newPassword));
+                return usr;// save
             }
         }
         return null;
