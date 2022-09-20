@@ -23,6 +23,7 @@
     "@angular/platform-browser-dynamic": "^14.0.0",
     "@angular/router": "^14.0.0",
     "@ng-bootstrap/ng-bootstrap": "^13.0.0",
+    "@ng-bootstrap/schematics": "^2.0.0-alpha.1",
     "@ngrx/store": "^14.2.0",
     "@popperjs/core": "^2.10.2",
     "bootstrap": "^5.2.1",

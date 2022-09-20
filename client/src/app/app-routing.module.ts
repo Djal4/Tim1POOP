@@ -6,12 +6,16 @@ import { LoginComponent } from './login/login.component';
 import { PocetnaStranaComponent } from './pocetna-strana/pocetna-strana.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import { AdDetailsComponent } from './ad-details/ad-details.component';
+import { RegistrationComponent } from './registration/registration.component';
+import { UserDetailComponent } from './user-detail/user-detail.component';
 const routes: Routes = [
   {path: 'pocetnaStrana', component: PocetnaStranaComponent},
   {path: 'omiljeni', component: OmiljeniComponent},
   {path: 'mojiOglasi', component: MojiOglasiComponent},
   {path: 'login', component: LoginComponent},
   {path: 'ad-details/:id', component:AdDetailsComponent},
+  {path: 'registration', component:RegistrationComponent},
+  {path: 'userDetails/:id', component:UserDetailComponent},
   { path: '', redirectTo: 'pocetnaStrana', pathMatch: 'full' }
 ];
 
