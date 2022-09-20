@@ -56,11 +56,12 @@ public class UserController {
     }
 
     @PutMapping("/{user}/{role}")
-    public boolean changeRole(@PathVariable(value = "user")Long ID,@PathVariable(value="role")int roleID)
+    public boolean changeRole(@PathVariable(value = "user")Long ID,@PathVariable(value="role")long roleID)
     {
         if(policy.isAdmin(auth))
         {
-            userRepository.updateRole(roleID,ID);
+            if(userRepository.updateRole(roleID,ID)!=0)
+                return true;
         }
         return false;
     }
