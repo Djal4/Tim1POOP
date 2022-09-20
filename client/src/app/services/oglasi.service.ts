@@ -17,4 +17,9 @@ export class OglasiService {
   public getAllAds():Observable<Ad[]>{
       return this.http.get<Ad[]>("http://localhost:8080/api/ads");
   } 
+
+  public getMyAds():Observable<Ad[]>{
+    return this.http.get<Ad[]>("http://localhost:8080/api/ads",{headers:{"Authorization":"Bearer "+localStorage.getItem("token")}});
+  }
+
 }
