@@ -23,7 +23,7 @@ export class PocetnaStranaComponent implements OnInit {
    }
 
   ngOnInit(): void {
-    localStorage.setItem('token','');
+    //localStorage.setItem('token','');
     this.oglasiService.getAllAds().subscribe(response => {
       console.log("Response received");
       this.ads = response;

@@ -12,6 +12,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AngularMaterialModule } from './angular-material.module';
 import { HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
+import { ZakazivanjeComponent } from './zakazivanje/zakazivanje.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { ReactiveFormsModule } from '@angular/forms';
     LoginComponent,
     MojiOglasiComponent,
     OmiljeniComponent,
-    PocetnaStranaComponent
+    PocetnaStranaComponent,
+    ZakazivanjeComponent
   ],
   imports: [
     BrowserModule,
