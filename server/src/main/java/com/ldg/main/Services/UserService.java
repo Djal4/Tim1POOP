@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.ldg.main.Models.User;
 import com.ldg.main.Repository.UserRepository;
 import com.ldg.main.payload.request.ChangePasswordRequest;
+import com.ldg.main.payload.request.ChangeUserRequest;
 import com.ldg.main.payload.request.RegisterRequest;
 import java.util.Optional;
 import org.springframework.security.core.Authentication;
@@ -50,4 +51,13 @@ public class UserService {
 
         return false;
     }
+
+    public User updateUser(Long ID,ChangeUserRequest request)
+    {
+
+        if(userRepository.updateUser(request.getFirstName(), request.getLastName(), ID)!=0)
+            return userRepository.findById(ID).get();
+        return null;
+    }
+
 }

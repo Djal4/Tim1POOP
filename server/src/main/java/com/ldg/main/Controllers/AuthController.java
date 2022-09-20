@@ -12,6 +12,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,11 +21,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ldg.main.Models.User;
 import com.ldg.main.Models.UserDetailsImpl;
+import com.ldg.main.Policies.UserPolicy;
 import com.ldg.main.Repository.UserRepository;
 import com.ldg.main.Services.UserService;
 import com.ldg.main.config.JwtTokenUtil;
 import com.ldg.main.exceptions.HttpStatusCodeException;
 import com.ldg.main.payload.request.ChangePasswordRequest;
+import com.ldg.main.payload.request.ChangeUserRequest;
 import com.ldg.main.payload.request.JwtRequest;
 import com.ldg.main.payload.response.JwtResponse;
 
@@ -41,6 +44,8 @@ public class AuthController {
     private UserService userService;
     @Autowired
     private Optional<User> user;
+    @Autowired
+    private UserPolicy policy;
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody @Valid JwtRequest request) throws HttpStatusCodeException {
@@ -64,6 +69,20 @@ public class AuthController {
     public boolean changePassword(@RequestBody @Valid ChangePasswordRequest request)
     {
         Authentication auth=SecurityContextHolder.getContext().getAuthentication();
-        return userService.changePassword(userRepository.findById(((UserDetailsImpl) auth.getPrincipal()).getID()).get(),request);
+        if(policy.update(auth,userRepository.findById(((UserDetailsImpl) auth.getPrincipal()).getID()).get().getID()))
+        {
+            return userService.changePassword(userRepository.findById(((UserDetailsImpl) auth.getPrincipal()).getID()).get(),request);
+        }
+        return false;
+    }
+
+    @PutMapping("/change/user/{ID}")
+    public User update(@PathVariable(value = "ID") Long ID,@RequestBody @Valid ChangeUserRequest request) {
+        Authentication auth=SecurityContextHolder.getContext().getAuthentication();
+        if(policy.update(auth,ID))
+        {
+            return userService.updateUser(ID,request);    
+        }
+        return null;
     }
 }
