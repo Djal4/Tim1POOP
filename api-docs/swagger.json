@@ -811,7 +811,7 @@
                 "security": [{"bearerAuth":[]}]
             }
         },
-        "/api/ads/dateiled/{adId}":{
+        "/api/ads/detailed/{adId}":{
             "get":{
                 "tags": ["Advertisments"],
                 "parameters": [
@@ -940,7 +940,8 @@
                             }
                         }
                     }
-                }
+                },
+                "security": [{"bearerAuth":[]}]
             }
         },
         "/api/ad_category":{
