@@ -13,6 +13,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,8 +21,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ldg.main.Models.User;
 import com.ldg.main.Models.UserDetailsImpl;
 import com.ldg.main.Repository.UserRepository;
+import com.ldg.main.Services.UserService;
 import com.ldg.main.config.JwtTokenUtil;
 import com.ldg.main.exceptions.HttpStatusCodeException;
+import com.ldg.main.payload.request.ChangePasswordRequest;
 import com.ldg.main.payload.request.JwtRequest;
 import com.ldg.main.payload.response.JwtResponse;
 
@@ -34,7 +37,8 @@ public class AuthController {
     JwtTokenUtil jwtUtil;
     @Autowired
     private UserRepository userRepository;
-
+    @Autowired
+    private UserService userService;
     @Autowired
     private Optional<User> user;
 
@@ -56,4 +60,10 @@ public class AuthController {
         }
     }
 
+    @PutMapping("/change/password")
+    public boolean changePassword(@RequestBody @Valid ChangePasswordRequest request)
+    {
+        Authentication auth=SecurityContextHolder.getContext().getAuthentication();
+        return userService.changePassword(userRepository.findById(((UserDetailsImpl) auth.getPrincipal()).getID()).get(),request);
+    }
 }

@@ -35,11 +35,6 @@ public class RegisterController {
     private UserRepository userRepository;
     @Autowired
     private UserService userService;
-    
-    private User user;
-
-    @Autowired
-    private PasswordEncoder encoder;
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody @Valid RegisterRequest request)
