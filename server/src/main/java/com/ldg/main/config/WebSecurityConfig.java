@@ -60,7 +60,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET, "/api/ad_category", "/api/country").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/roles").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/ads", "/api/ads/*").permitAll()
-                .antMatchers("/api/auth/login").permitAll()
+                .antMatchers("/api/auth/*").permitAll()
                 .anyRequest().authenticated();
 
         http.exceptionHandling()
