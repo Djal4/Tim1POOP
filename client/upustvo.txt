@@ -1,0 +1,12 @@
+Dati nazive kategorijama za razgledanje.
+Npr. 
+accepted==null => pending
+accepted==0 => rejected
+accepted==1 => accepted
+accepted==1 and mark!=0 => marked
+
+Svaka kategorija moze biti neke boje.
+Isto vazi i za kategorije oglasa( RENT jedna a SELL druga boja).
+
+Za stranicu moji oglasi ne treba prikazivati vlasnika.
+Dodati filtere.
