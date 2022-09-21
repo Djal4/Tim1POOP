@@ -12,7 +12,6 @@ public class RegisterRequest implements Serializable{
     //@Min(value=4)
     private String firstName;
     @NotEmpty
-    //@Min(value=4)
     private String lastName;
 
     @NotEmpty
@@ -31,10 +30,10 @@ public class RegisterRequest implements Serializable{
 
     public RegisterRequest(String firstName,String lastName,String password,String username)
     {
-        setFirstName(firstName);
-        setLastName(lastName);
-        setPassword(password);
-        setUsername(username);
+        this.firstName=firstName;
+        this.lastName=lastName;
+        this.password=password;
+        this.username=username;
     }
 
     public String getFirstName() {

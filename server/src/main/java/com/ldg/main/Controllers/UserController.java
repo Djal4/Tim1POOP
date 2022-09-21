@@ -3,6 +3,8 @@ package com.ldg.main.Controllers;
 import java.util.List;
 import java.util.Optional;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,6 +21,8 @@ import com.ldg.main.Models.User;
 import com.ldg.main.Repository.UserRepository;
 import com.ldg.main.Policies.UserPolicy;
 import com.ldg.main.Models.UserDetailsImpl; 
+import com.ldg.main.payload.request.ChangePasswordRequest;
+import com.ldg.main.payload.request.ChangeUserRequest;
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
@@ -64,16 +68,6 @@ public class UserController {
                 return true;
         }
         return false;
-    }
-
-    @PutMapping("/{user}")
-    public User update(@PathVariable(value = "user") Long ID) {
-        if(policy.update(auth,ID))
-        {
-            user = userRepository.findById(ID);
-            return new User();
-        }
-        return null;
     }
 
     @DeleteMapping("/{user}")

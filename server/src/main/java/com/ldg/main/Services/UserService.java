@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 
 import com.ldg.main.Models.User;
 import com.ldg.main.Repository.UserRepository;
+import com.ldg.main.payload.request.ChangePasswordRequest;
+import com.ldg.main.payload.request.ChangeUserRequest;
 import com.ldg.main.payload.request.RegisterRequest;
 import java.util.Optional;
 import org.springframework.security.core.Authentication;
@@ -20,7 +22,6 @@ public class UserService {
     private UserRepository userRepository;
 
     private User user;
-    private Optional<User> usr;
     @Autowired
     private PasswordEncoder encoder;
 
@@ -39,13 +40,24 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public User changePassword(User usr, String oldPassword, String newPassword, String newPasswordConfirm) {
-        if (encoder.matches(oldPassword, usr.getPassword())) {
-            if (newPassword.equals(newPasswordConfirm)) {
-                usr.setPassword(encoder.encode(newPassword));
-                return usr;// save
+    public boolean changePassword(User usr,ChangePasswordRequest request) 
+    {
+        if (encoder.matches(request.getOldPassword(), usr.getPassword())) {
+            if ((request.getNewPassword()).equals(request.getNewPasswordConfirmed())) {
+                if(userRepository.setPassword(encoder.encode(request.getNewPassword()),usr.getID())!=0)
+                    return true;
             }
         }
+
+        return false;
+    }
+
+    public User updateUser(Long ID,ChangeUserRequest request)
+    {
+
+        if(userRepository.updateUser(request.getFirstName(), request.getLastName(), ID)!=0)
+            return userRepository.findById(ID).get();
         return null;
     }
+
 }
