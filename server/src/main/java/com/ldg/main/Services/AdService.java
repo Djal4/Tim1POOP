@@ -124,6 +124,7 @@ public class AdService {
 
     public void create(AdCreateRequest adCreateRequest) {
         Ad ad = new Ad(adCreateRequest);
+        System.out.println(ad.getCityId());
         adRepository.save(ad);
     }
 
@@ -132,6 +133,7 @@ public class AdService {
         ad.setArea(adCreateRequest.getArea());
         ad.setPrice(adCreateRequest.getPrice());
         ad.setDescription(adCreateRequest.getDescription());
+        ad.setCityId(adCreateRequest.getCityId());
         adRepository.save(ad);
     }
 

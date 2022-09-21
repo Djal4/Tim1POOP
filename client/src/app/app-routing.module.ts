@@ -25,6 +25,5 @@ const routes: Routes = [
   exports: [RouterModule]
 })
 export class AppRoutingModule {
-  @Input()
-  token: string | null;
+
 }
