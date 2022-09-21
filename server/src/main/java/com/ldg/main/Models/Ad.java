@@ -32,7 +32,7 @@ public class Ad {
     @Column(name = "owner_id")
     private long ownerId;
 
-    @Column(name = "city_id")
+    @Column(name = "city_id", insertable = true, updatable = true)
     private long cityId;
 
     @Column(name = "area")
@@ -55,6 +55,7 @@ public class Ad {
         this.description = ad.getDescription();
         this.ownerId = ad.getOwnerId();
         this.price = ad.getPrice();
+        this.cityId = ad.getCityId();
     }
 
     public Ad(long id, long adCategoryId, long ownerId) {
