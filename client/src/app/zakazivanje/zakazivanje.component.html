@@ -1,44 +1,69 @@
 <div class="sightseeing-container">
     <div class="navigation">
-        <p (click)="setOwner($event)" class="active-tab">Sightseeings for my advertisments</p>
+        <p (click)="setOwner($event)" class="active-tab">
+            Sightseeings for my advertisments
+        </p>
         <p (click)="setUser($event)">Requested sightseeings</p>
     </div>
-    <div *ngIf="owner; then thenOwner else elseUser"></div>
-    <ng-template #thenOwner>
-        <div class="my-sightseeings" *ngFor="let sight of ownerSightseeings">
-            <div class="sightseeing">
-                <div class="sightseeing-header">
-                    <div [classList]="['status',getStatus(sight).toLowerCase()]">{{ getStatus(sight) }}</div>
-                    <div><a [routerLink]="['/ad-details/'+sight.ad.id]">Advertisment</a></div>
+
+    <div class="my-sightseeings" *ngFor="let sight of ownerSightseeings">
+        <div class="sightseeing">
+            <div class="sightseeing-header">
+                <div [classList]="['status', getStatus(sight).toLowerCase()]">
+                    {{ getStatus(sight) }}
                 </div>
-                <div class="time">Time:{{ sight.time }}</div>
-                <div class="user">
-                    Username: {{ sight.user.username }}<br/>
-                    Name: {{ sight.user.name }}<br/>
+                <div>
+                    <a [routerLink]="['/ad-details/' + sight.ad.id]"
+                        >Advertisment </a>
                 </div>
-                <div *ngIf="sight.mark>0">
-                    Mark: {{ sight.mark }}<br> 
-                    Comment: {{ sight.comment }}
-                </div>
-                <div *ngIf="sight.accepted===null">
+            </div>
+            <div class="time">Time:{{ sight.time }}</div>
+            <div class="user">
+                Username: {{ sight.user.username }}<br />
+                Name: {{ sight.user.name }}<br />
+            </div>
+            <div *ngIf="sight.mark > 0">
+                Mark: {{ sight.mark }}<br />
+                Comment: {{ sight.comment }}
+            </div>
+            <div *ngIf="owner; else elseUser">
+                <div *ngIf="sight.accepted === null">
                     <div class="accept-or-reject">
-                        <button (click)="acceptOrReject(sight,true)" class="accept-button">Accept</button>
-                        <button (click)="acceptOrReject(sight,false)" class="reject-button">Reject</button>
+                        <button
+                            (click)="acceptOrReject(sight, true)"
+                            class="accept-button"
+                        >
+                            Accept
+                        </button>
+                        <button
+                            (click)="acceptOrReject(sight, false)"
+                            class="reject-button"
+                        >
+                            Reject
+                        </button>
                     </div>
                 </div>
             </div>
+            <ng-template #elseUser>
+                <div *ngIf="sight.mark == 0 && sight.accepted === true">
+                    <form id="mark-form">
+                        <div class="mark-input">
+                        <label>Mark:&nbsp;&nbsp;</label><select name="mark">
+                            <option>1</option>
+                            <option>2</option>
+                            <option>3</option>
+                            <option>4</option>
+                            <option>5</option>
+                        </select>
+                        </div>
+                        <div class="comment-input">
+                        <label>Comment:</label>
+                        <textarea name="comment"></textarea>
+                        </div>
+                        <button (click)="markAndComment($event,sight)" (keydown)="preventDefault($event)">Submit</button>
+                    </form>
+                </div>
+            </ng-template>
         </div>
-    </ng-template>
-    <ng-template #elseUser>
-        <div class="user-sightseeings" *ngFor="let sight of requestedSightseeings">
-            <div class="sightseeing">
-                <div class="status">{{ getStatus(sight) }}</div>
-                <div class="time">{{ sight.time }}</div>
-                <div *ngIf="sight.mark>0; else markAndComment">{{ sight.mark }}/ {{ sight.comment }}</div>
-                <ng-template #markAndComment>
-                    <div *ngIf="sight.acepted==true">aaa</div>
-                </ng-template>
-            </div>
-        </div>
-    </ng-template>
     </div>
+</div>

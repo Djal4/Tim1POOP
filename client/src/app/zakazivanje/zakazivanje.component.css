@@ -1,35 +1,43 @@
-.sightseeing-container{
+.sightseeing-container {
     display: flex;
     flex-direction: column;
     align-items: center;
     margin-top: 20px;
+    margin-bottom: 50px;
     gap: 25px;
 }
-.sightseeing-container > .navigation{
+
+.sightseeing-container>.navigation {
     display: flex;
-    gap:20px;
+    gap: 20px;
 }
-.active-tab{
+
+.active-tab {
     border-bottom: 5px solid #e3f2fd;
 }
-.sightseeing{
+
+.sightseeing {
     display: flex;
     flex-direction: column;
-    gap:10px;
+    gap: 10px;
     align-items: center;
     padding: 15px;
     border-radius: 5px;
     border: 1px solid gray;
 }
-.sightseeing-header{
+
+.sightseeing-header {
     display: flex;
-    gap:30px;
+    gap: 30px;
 }
-.accept-or-reject{
+
+.accept-or-reject {
     display: flex;
-    gap:10px;
+    gap: 10px;
 }
-.accept-button,.reject-button{
+
+.accept-button,
+.reject-button {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -39,9 +47,25 @@
     border: none;
     padding: 5px 10px;
 }
-.accept-button{
+
+.accept-button {
     background-color: green;
 }
-.reject-button{
+
+.reject-button {
     background-color: red;
+}
+
+#mark-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+.comment-input {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
 }

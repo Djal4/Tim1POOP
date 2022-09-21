@@ -7,4 +7,8 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'Booking';
+  token: string | null;
+  ngOnInit() {
+    this.token = localStorage.getItem("token");
+  }
 }

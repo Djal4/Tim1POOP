@@ -10,16 +10,16 @@ import { throwError } from 'rxjs';
 })
 export class OglasiService {
 
-  
 
-  constructor(private http:HttpClient) { }
 
-  public getAllAds():Observable<Ad[]>{
-      return this.http.get<Ad[]>("http://localhost:8080/api/ads");
-  } 
+  constructor(private http: HttpClient) { }
 
-  public getMyAds():Observable<Ad[]>{
-    return this.http.get<Ad[]>("http://localhost:8080/api/ads",{headers:{"Authorization":"Bearer "+localStorage.getItem("token")}});
+  public getAllAds(): Observable<Ad[]> {
+    return this.http.get<Ad[]>("http://localhost:8080/api/ads");
+  }
+
+  public getMyAds(): Observable<Ad[]> {
+    return this.http.get<Ad[]>("http://localhost:8080/api/ads/my", { headers: { "Authorization": "Bearer " + localStorage.getItem("token") } });
   }
 
 }

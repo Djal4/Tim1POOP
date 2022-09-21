@@ -9,101 +9,127 @@ import { Router } from '@angular/router';
 export class ZakazivanjeComponent implements OnInit {
 
   constructor(private router: Router) { }
-  owner:boolean;
-  baseUrl:string;
-  requestedSightseeings:any[];
-  ownerSightseeings:any[];
-  sightseeingCategories:any[];
+  owner: boolean;
+  baseUrl: string;
+  requestedSightseeings: any[];
+  ownerSightseeings: any[];
+  sightseeingCategories: any[];
+  sightseeingsToShow: any[];
   ngOnInit(): void {
-    this.baseUrl="http://localhost:8080/api/sightseeing/";
-    this.owner=true;
-    if(localStorage.getItem("token")==null)
+    this.baseUrl = "http://localhost:8080/api/sightseeing/";
+    this.owner = true;
+    if (localStorage.getItem("token") == null)
       this.router.navigate(["/"]);
-    this.sightseeingCategories=[
+    this.sightseeingCategories = [
       {
-        id:0,
-        name:"All",
-        condition:(sightseeing:any)=>true
+        id: 0,
+        name: "All",
+        condition: (sightseeing: any) => true
       },
       {
-        id:1,
-        name:"Unknown",
-        condition:(sightseeing:any)=>sightseeing.accepted===null
+        id: 1,
+        name: "Pending",
+        condition: (sightseeing: any) => sightseeing.accepted === null
       },
       {
-        id:2,
-        name:"Accepted",
-        condition:(sightseeing:any)=>sightseeing.accepted===true
+        id: 2,
+        name: "Accepted",
+        condition: (sightseeing: any) => sightseeing.accepted === true
       },
       {
-        id:3,
-        name:"Rejected",
-        condition:(sightseeing:any)=>sightseeing.accepted===false
+        id: 3,
+        name: "Rejected",
+        condition: (sightseeing: any) => sightseeing.accepted === false
       },
       {
-        id:4,
-        name:"Marked and commented",
-        query:(sightseeing:any)=>sightseeing.mark>0
+        id: 4,
+        name: "Marked",
+        query: (sightseeing: any) => sightseeing.mark > 0
       }
     ];
-    fetch(this.baseUrl+"owner",{headers:{"Authorization":"Bearer "+localStorage.getItem("token")}})
-    .then(response=>{
-      this.failedAuth(response);
-      return response.json();
-    })
-    .then(response=>{
-      this.ownerSightseeings=response;
-    })
-    .catch(console.error);
+    fetch(this.baseUrl + "owner", { headers: { "Authorization": "Bearer " + localStorage.getItem("token") } })
+      .then(response => {
+        this.failedAuth(response);
+        return response.json();
+      })
+      .then(response => {
+        this.ownerSightseeings = response;
+      })
+      .catch(console.error);
 
-    fetch(this.baseUrl+"user",{headers:{"Authorization":"Bearer "+localStorage.getItem("token")}})
-    .then(response=>{
-      this.failedAuth(response);
-      return response.json();
-    })
-    .then(response=>{
-      this.requestedSightseeings=response;
-    })
-    .catch(console.error);
+    fetch(this.baseUrl + "user", { headers: { "Authorization": "Bearer " + localStorage.getItem("token") } })
+      .then(response => {
+        this.failedAuth(response);
+        return response.json();
+      })
+      .then(response => {
+        this.requestedSightseeings = response;
+      })
+      .catch(console.error);
   }
-  failedAuth(response:any){
-    if(response.status===401){
+  failedAuth(response: any) {
+    if (response.status === 401) {
       localStorage.removeItem("token");
       this.router.navigate(["/"]);
     }
   }
-  getStatus(sightseeing:any){
-    if(sightseeing.accepted===null)
-      return "Unknown";
-    if(sightseeing.accepted===false)
+  getStatus(sightseeing: any) {
+    if (sightseeing.accepted === null)
+      return "Pending";
+    if (sightseeing.accepted === false)
       return "Rejected";
-    if(sightseeing.accepted===true && sightseeing.mark==0)
+    if (sightseeing.accepted === true && sightseeing.mark == 0)
       return "Accepted";
 
-    return "Marked and commented";
+    return "Marked";
   }
-  acceptOrReject(sight:any,b:boolean){
-    const url=this.baseUrl+((b)?"accept":"reject")+"/"+sight.id;
-    fetch(url,{headers:{"Authorization":"Bearer "+localStorage.getItem("token")},method:"PATCH"})
-    .then(response=>{
-      this.failedAuth(response);
-      return response.json();
-    })
-    .then(response=>{
-      sight.accepted=b;
-    })
-    .catch(console.error);
+  acceptOrReject(sight: any, b: boolean) {
+    const url = this.baseUrl + ((b) ? "accept" : "reject") + "/" + sight.id;
+    fetch(url, { headers: { "Authorization": "Bearer " + localStorage.getItem("token") }, method: "PATCH" })
+      .then(response => {
+        this.failedAuth(response);
+        return response.json();
+      })
+      .then(response => {
+        sight.accepted = b;
+      })
+      .catch(console.error);
   }
-
-  setOwner(event:any){
+  preventDefault(event: any) {
+    event.preventDefault();
+  }
+  markAndComment(event: any, sight: any) {
+    this.preventDefault(event);
+    let formData = new FormData(document.getElementById("mark-form") as HTMLFormElement);
+    let mark: number = Number(formData.get("mark"));
+    let comment: string | undefined = formData.get("comment")?.toString();
+    if (comment == '') {
+      alert("Comment mustn't be empty!");
+      return;
+    }
+    fetch(this.baseUrl + "mark_and_comment/" + sight.id, { method: "PATCH", body: JSON.stringify({ mark, comment }), headers: { "Content-Type": "application/json", "Authorization": "Bearer " + localStorage.getItem("token") } })
+      .then(response => {
+        this.failedAuth(response);
+        return response.json();
+      })
+      .then(response => {
+        sight.mark = mark;
+        sight.comment = comment;
+        this.owner = false;
+      })
+      .catch(console.error);
+  }
+  setOwner(event: any) {
     document.getElementsByClassName("active-tab")[0].classList.remove("active-tab");
     event.target.classList.add("active-tab");
-    this.owner=true;
+    this.sightseeingsToShow = this.ownerSightseeings;
+    this.owner = true;
   }
 
-  setUser(event:any){
+  setUser(event: any) {
     document.getElementsByClassName("active-tab")[0].classList.remove("active-tab");
     event.target.classList.add("active-tab");
-    this.owner=false;
+    this.sightseeingsToShow = this.requestedSightseeings;
+    this.owner = false;
   }
 }
