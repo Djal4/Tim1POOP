@@ -62,6 +62,7 @@ public class UserController {
     @PutMapping("/{user}/{role}")
     public boolean changeRole(@PathVariable(value = "user")Long ID,@PathVariable(value="role")long roleID)
     {
+        auth = SecurityContextHolder.getContext().getAuthentication();
         if(policy.isAdmin(auth))
         {
             if(userRepository.updateRole(roleID,ID)!=0)
@@ -72,6 +73,7 @@ public class UserController {
 
     @DeleteMapping("/{user}")
     public boolean destroy(@PathVariable(value = "user") Long ID) {
+        auth = SecurityContextHolder.getContext().getAuthentication();
         if(policy.delete(auth,ID))
         {
             userRepository.delete(this.show(ID));
