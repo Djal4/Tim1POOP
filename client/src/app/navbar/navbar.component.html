@@ -13,6 +13,7 @@
       <a *ngIf="token==null" class="nav-item nav-link" href="#" routerLink="/login">Ulogujte se</a>
       <a class="nav-item nav-link" href="#" routerLink="/mojiOglasi">Moji oglasi</a>
       <a *ngIf="token==null" class="nav-item nav-link" href="#" routerLink="/registration" tabindex="-1" aria-disabled="true">Napravi nalog</a>
+      <a *ngIf="token!=null" class="nav-item nav-link" href="#" routerLink="/changePassword" tabindex="-1" aria-disabled="true">Izmenite lozinku</a>
       <a *ngIf="token!=null" class="nav-item nav-link" href="#" tabindex="-1" aria-disabled="true">Moj nalog</a>
       <a *ngIf="token!=null" class="nav-item nav-link" href="#" (click)="logOut()" tabindex="-1" aria-disabled="true">Izloguj se</a>
     </div>

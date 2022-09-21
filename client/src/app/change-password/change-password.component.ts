@@ -9,53 +9,38 @@ import { isEmpty } from 'rxjs';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-registration',
-  templateUrl: './registration.component.html',
-  styleUrls: ['./registration.component.scss']
+  selector: 'app-change-password',
+  templateUrl: './change-password.component.html',
+  styleUrls: ['./change-password.component.scss']
 })
-export class RegistrationComponent implements OnInit {
+export class ChangePasswordComponent implements OnInit {
+
   @Input()
   token: string | null;
   contactForm;
   valid:number;
-  firstName = new FormControl('', [
-    Validators.required,
-    Validators.minLength(3)
-  ]);
-
-  lastName = new FormControl('', [
-    Validators.required,
-    Validators.minLength(3)
-  ]);
-
-  username = new FormControl('', [
-    Validators.required,
-    Validators.minLength(4)
-  ]);
-
-  password = new FormControl('', [Validators.required]);
+  
+  oldPassword = new FormControl('', [Validators.required]);
+  newPassword = new FormControl('', [Validators.required]);
+  newPasswordConfirmed = new FormControl('', [Validators.required]);
 
   constructor(private formBuilder: FormBuilder,
     private loginService: LoginService,
     private http: HttpClient,
-    private router: Router) {
+    private router: Router) { 
       this.contactForm = this.formBuilder.group({
-        firstName: this.firstName,
-        lastName: this.lastName,
-        username: this.username,
-        password: this.password
+        oldPassword: this.oldPassword,
+        newPassword: this.newPassword,
+        newPasswordConfirmed: this.newPasswordConfirmed
       });
-     }
-
-    
+    }
 
   ngOnInit(): void {
   }
 
-
   onSubmit() {
     console.log(this.contactForm.value);
-    this.http.post('http://localhost:8080/api/auth/register',this.contactForm.value,{observe:"response"}).subscribe((res) =>{
+    this.http.put('http://localhost:8080/api/auth/change/password',this.contactForm.value,{ headers: { "Authorization": "Bearer " + localStorage.getItem("token") },observe:"response"}).subscribe((res) =>{
       this.valid = 1;
       localStorage.setItem("token",JSON.parse(JSON.stringify(res.body)).token);
       setTimeout(()=>{
@@ -69,7 +54,6 @@ export class RegistrationComponent implements OnInit {
     console.log(this.valid);
     
   })
-    this.token = localStorage.getItem("token");
   }
 
   validiraj(): void {

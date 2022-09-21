@@ -8,6 +8,7 @@ import { AdDetailsComponent } from './ad-details/ad-details.component';
 import { ZakazivanjeComponent } from './zakazivanje/zakazivanje.component';
 import { RegistrationComponent } from './registration/registration.component';
 import { UserDetailComponent } from './user-detail/user-detail.component';
+import { ChangePasswordComponent } from './change-password/change-password.component';
 const routes: Routes = [
   { path: 'pocetnaStrana', component: PocetnaStranaComponent },
   { path: 'omiljeni', component: OmiljeniComponent },
@@ -16,6 +17,7 @@ const routes: Routes = [
   { path: 'ad-details/:id', component: AdDetailsComponent },
   { path: 'zakazivanje', component: ZakazivanjeComponent },
   { path: 'registration', component: RegistrationComponent },
+  { path: 'changePassword', component: ChangePasswordComponent },
   { path: 'userDetails/:id', component: UserDetailComponent },
   { path: '', redirectTo: 'pocetnaStrana', pathMatch: 'full' }
 ];
