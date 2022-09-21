@@ -47,7 +47,7 @@ public class AllBeans {
         // Allowed React app, Swagger docs and Angular app on localhost
         configuration.setAllowedOrigins(
                 Arrays.asList("http://localhost:3000", "http://localhost:8888", "http://localhost:4200"));
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PATCH", "DELETE", "OPTIONS"));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PATCH", "PUT", "DELETE", "OPTIONS"));
         configuration.addAllowedHeader("authorization");
         configuration.addAllowedHeader("content-type");
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

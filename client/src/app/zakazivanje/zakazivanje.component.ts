@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { throwMatDuplicatedDrawerError } from '@angular/material/sidenav';
 import { Router } from '@angular/router';
 
 @Component({
@@ -15,6 +16,7 @@ export class ZakazivanjeComponent implements OnInit {
   ownerSightseeings: any[];
   sightseeingCategories: any[];
   sightseeingsToShow: any[];
+  filteredSightSeeings:any[];
   ngOnInit(): void {
     this.baseUrl = "http://localhost:8080/api/sightseeing/";
     this.owner = true;
@@ -34,7 +36,7 @@ export class ZakazivanjeComponent implements OnInit {
       {
         id: 2,
         name: "Accepted",
-        condition: (sightseeing: any) => sightseeing.accepted === true
+        condition: (sightseeing: any) => sightseeing.accepted === true && Number(sightseeing.mark)==0
       },
       {
         id: 3,
@@ -44,7 +46,7 @@ export class ZakazivanjeComponent implements OnInit {
       {
         id: 4,
         name: "Marked",
-        query: (sightseeing: any) => sightseeing.mark > 0
+        condition: (sightseeing: any) => Number(sightseeing.mark) > 0
       }
     ];
     fetch(this.baseUrl + "owner", { headers: { "Authorization": "Bearer " + localStorage.getItem("token") } })
@@ -54,6 +56,8 @@ export class ZakazivanjeComponent implements OnInit {
       })
       .then(response => {
         this.ownerSightseeings = response;
+        this.filteredSightSeeings=response;
+        this.sightseeingsToShow=response;
       })
       .catch(console.error);
 
@@ -123,6 +127,8 @@ export class ZakazivanjeComponent implements OnInit {
     document.getElementsByClassName("active-tab")[0].classList.remove("active-tab");
     event.target.classList.add("active-tab");
     this.sightseeingsToShow = this.ownerSightseeings;
+    this.filteredSightSeeings=this.sightseeingsToShow;
+    this.sightseeingCategories=this.sightseeingCategories;
     this.owner = true;
   }
 
@@ -130,6 +136,12 @@ export class ZakazivanjeComponent implements OnInit {
     document.getElementsByClassName("active-tab")[0].classList.remove("active-tab");
     event.target.classList.add("active-tab");
     this.sightseeingsToShow = this.requestedSightseeings;
+    this.filteredSightSeeings=this.sightseeingsToShow;
+    this.sightseeingCategories=this.sightseeingCategories;
     this.owner = false;
+  }
+  filterByCategory(event:any){
+    let value=Number(event.target.value);
+    this.filteredSightSeeings=this.sightseeingsToShow.filter(this.sightseeingCategories[value].condition);
   }
 }

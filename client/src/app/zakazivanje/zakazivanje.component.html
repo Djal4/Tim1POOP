@@ -5,9 +5,13 @@
         </p>
         <p (click)="setUser($event)">Requested sightseeings</p>
     </div>
-
-    <div class="my-sightseeings" *ngFor="let sight of ownerSightseeings">
-        <div class="sightseeing">
+    <div class="filter">
+        <label>Filter by status: &nbsp;&nbsp;</label>
+        <select (change)="filterByCategory($event)">
+            <option *ngFor="let category of sightseeingCategories" [value]="category.id">{{ category.name }}</option>
+        </select>
+    </div>
+        <div class="sightseeing" *ngFor="let sight of filteredSightSeeings">
             <div class="sightseeing-header">
                 <div [classList]="['status', getStatus(sight).toLowerCase()]">
                     {{ getStatus(sight) }}
@@ -18,7 +22,7 @@
                 </div>
             </div>
             <div class="time">Time:{{ sight.time }}</div>
-            <div class="user">
+            <div class="user" *ngIf="owner">
                 Username: {{ sight.user.username }}<br />
                 Name: {{ sight.user.name }}<br />
             </div>
@@ -66,4 +70,3 @@
             </ng-template>
         </div>
     </div>
-</div>
