@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="oglas.css">
+    <title>Document</title>
+</head>
+<body>
+    <div class="ad-container">
+        <div class="ad">
+            <header>
+                <p class="ad-type">RENT</p>
+                <p class="ad-price">100$</p>
+            </header>
+            <main>
+                Area and description
+                primer. Area of flat is 100. Description...
+            </main>
+            <footer>
+                <p>lajk broj_lajkova</p>
+                <p>prosecna ocena ako je razlicita od nule. inace neka pise nije ocenjeno ili tako nesto.</p>
+                <p class="ad-location">
+                    <i class="location-icon"></i> Kragujevac,Srbija
+                </p>
+                <p class="ad-owner">Owner</p>
+            </footer>
+            <div>
+                Samo za prikaz mojih oglasa<br>
+                edit
+                delete
+            </div>
+        </div>
+    </div>
+    <br/>
+    <form>
+        Select za grad i drzavu. Prilikom kreiranja ili izmene oglasa salje se samo id grada.
+        <select name="country"></select>
+        <select name="city"></select>
+    </form>
+    <script>
+        const countryDiv=document.getElementsByName("country")[0];
+        const cityDiv=document.getElementsByName("city")[0];
+        let countries;
+        let changeChildren=(div,data)=>{
+            let children="";
+            for(let d of data){
+                children+=`<option value="${d.id}">${d.name}</option>`
+            }
+            div.innerHTML=children;
+        };
+        document.body.onload=async()=>{
+            fetch("http://localhost:8080/api/country")
+            .then(res=>res.json())
+            .then(res=>{
+                countries=res;
+                changeChildren(countryDiv,countries);
+                changeChildren(cityDiv,countries[0].cities);
+            })
+            .catch(console.log)
+        }
+        countryDiv.onchange=(e)=>{
+            let id=e.target.value;
+            let elId=countries.findIndex(value=>value.id==id);
+            if(elId==-1){
+                console.log("ERROR");
+                return;
+            }
+            changeChildren(cityDiv,countries[elId].cities);
+        }
+    </script>
+</body>
+</html>

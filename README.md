@@ -7,4 +7,5 @@ Go to `server/src/main/resources/database` and import `skuci_se.sql` in phpmyadm
 ![phpmyadmin homepage](./img/phpmyadmin_home.png)
 ![phpmyadmin homepage](./img/phpmyadmin_import.png)
 
-Open `server` directory in VSCode or some other IDE and run it.
+Install `Run Java` and other Java extensions in VSCode.  
+Open `server` directory in VSCode and run it.
