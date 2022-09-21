@@ -47,6 +47,55 @@
   </div>
 </ng-template>
 
+<ng-template #content2 let-modal>
+  <div class="modal-header">
+    <h2 class="modal-title" id="modal-basic-title">Uredi oglas</h2>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+  </div>
+  <div class="modal-body">
+    <form>
+      <div class="mb-3">
+        <label for="dateOfBirth">Kategorija</label>
+        <div class="input-group">
+          
+          <select class="form-control" name="adCategoryId" [(ngModel)]="selectedOglas.adCategoryId"> 
+            <option *ngFor="let kategorija of kategorije" [value]="kategorija.id">{{kategorija.title}}</option> 
+        </select> 
+        </div>
+      </div>
+      <div class="mb-3">
+        <label for="dateOfBirth">Kvadratura</label>
+        <div class="input-group">
+          <input id="area" class="form-control" [(ngModel)]="selectedOglas!.area"  placeholder="Kvadratura" name="area" type="number">
+        </div>
+      </div>
+      <div class="mb-3">
+        <label for="dateOfBirth">Cena</label>
+        <div class="input-group">
+          <input id="price" class="form-control" [(ngModel)]="selectedOglas!.price"  placeholder="Cena" name="price" type="number">
+        </div>
+      </div>
+      <div class="mb-3">
+        <label for="dateOfBirth">Grad</label>
+        <div class="input-group">
+          <select class="form-control" name="city" [(ngModel)]="selectedOglas!.cityId"> 
+            <option *ngFor="let grad of gradovi" [value]="grad.id">{{grad.name}}</option> 
+        </select> 
+        </div>
+      </div>
+      <div class="mb-3">
+        <label for="dateOfBirth">Opis</label>
+        <div class="input-group">
+          <input id="opis" class="form-control" [(ngModel)]="selectedOglas!.description" placeholder="Opis" name="opis" type="text">
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click');updateOglas();">Save</button>
+  </div>
+</ng-template>
+
 <div *ngIf="valid == 0" classs="container p-5">
 	<div class="row no-gutters">
 		<div class="col-lg-6 col-md-12 m-auto">
@@ -64,6 +113,7 @@
     <h1>MOJI OGLASI</h1>
     <button id="dugme1" type="button"  (click)="open(content)" class="btn btn-primary btn-lg">Napravi novi oglas</button>
 </header>
+<div>
 <table mat-table [dataSource]="myAds" class="mat-elevation-z8">
     
     <ng-container matColumnDef="Kategorija">
@@ -93,18 +143,19 @@
 
     <ng-container matColumnDef="Uredi">
       <th mat-header-cell *matHeaderCellDef></th>
-      <td class="cell"  *matCellDef="let element"><button mat-raised-button color="primary">Uredi</button>
+      <td class="cell"  *matCellDef="let element"><button mat-raised-button color="primary" (click)="otvoriEdit(element.id,content2)">Uredi</button>
       </td>
     </ng-container>
 
-    <ng-container matColumnDef="Obrisi">
+    <!-- <ng-container matColumnDef="Obrisi">
       <th mat-header-cell *matHeaderCellDef></th>
       <td class="cell" *matCellDef="let element"><button mat-raised-button color="warn">Obrisi</button>
       </td>
     </ng-container>
-    
+     -->
   
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
   </table>
+</div>
 </div>

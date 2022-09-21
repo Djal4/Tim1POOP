@@ -4,7 +4,7 @@ import { User } from "./user";
 export class Ad {
 
     id: number;
-    adCategoryId: number;
+    adCategoryId?: number;
     owner: User;
     cityId: number;
     country:string;

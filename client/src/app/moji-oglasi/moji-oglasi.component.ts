@@ -37,11 +37,12 @@ const ELEMENT_DATA: PeriodicElement[] = [
 
 export class MojiOglasiComponent implements OnInit {
 
-  displayedColumns: string[] = ['Kategorija', 'Grad', 'Drzava', 'Kvadratura', 'Cena', 'Uredi', 'Obrisi'];
+  displayedColumns: string[] = ['Kategorija', 'Grad', 'Drzava', 'Kvadratura', 'Cena', 'Uredi'];
   dataSource = ELEMENT_DATA;
   myAds:Ad[];
   noviOglas:Ad;
-  kategorije:AdCategory[] | null;
+  selectedOglas:Ad;
+  kategorije:AdCategory[] | null | undefined;
   drzave:Country[] | null;
   gradovi:City[] | undefined;
   closeResult = '';
@@ -52,10 +53,12 @@ export class MojiOglasiComponent implements OnInit {
   valid:number;
   ngOnInit(): void {
       this.noviOglas = new Ad;
+      this.selectedOglas;
       console.log("novi oglas kreiran");
       console.log(this.noviOglas);
       this.oglasiService.getMyAds().subscribe(response => {
       console.log("Response received");
+      console.log(this.kategorije);
       this.myAds = response;
       console.log("MOJI OGLASI");
       console.log(this.myAds);
@@ -103,6 +106,38 @@ export class MojiOglasiComponent implements OnInit {
     });
   }
 
+  open2(content2:any) {
+    this.modalService.open(content2, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+
+  onChange(event:any){
+    console.log(event.value);
+    this.selectedOglas.adCategoryId = event.value;
+  }
+
+  otvoriEdit(id:number,content2:any){
+    
+    this.oglasiService.getAdById(id).subscribe((response:any) => {
+      console.log("Response received");
+      this.selectedOglas = response;
+      // let index =this.kategorije?.findIndex(value =>
+      //   value.title == response.adCategory);
+      // this.selectedOglas.adCategoryId = this.kategorije?[index].id; 
+      console.log("SELECTED OGLAS");
+      console.log(this.selectedOglas);
+      this.open2(content2);
+
+    },
+    error =>{
+      console.log("error caught in component");
+      console.error(error);
+    })
+  }
+
   private getDismissReason(reason: any): string {
     if (reason === ModalDismissReasons.ESC) {
       return 'by pressing ESC';
@@ -123,6 +158,24 @@ export class MojiOglasiComponent implements OnInit {
       console.error(error);
       
     })
+  }
+
+  updateOglas():void{
+    console.log("NOVI OGLAS");
+    console.log(this.selectedOglas);
+    this.http.patch<Ad>('http://localhost:8080/api/ads/'+this.selectedOglas.id,this.selectedOglas,{ headers: { "Authorization": "Bearer " + localStorage.getItem("token") } }).subscribe((res) =>{
+        console.log(res);
+    },
+    (error)=>{
+      console.log("error caught in component");
+      console.error(error);
+      
+    })
+  }
+
+
+  editujOglas():void{
+    console.log(this.selectedOglas);
   }
 
 }

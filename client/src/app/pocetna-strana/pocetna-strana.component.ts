@@ -12,7 +12,7 @@ export class PocetnaStranaComponent implements OnInit {
 
   korisnici:User[] = [];
   ads: Ad[];
-
+  allAds: any;
   constructor(private oglasiService:OglasiService,
     private router:Router) {
     
@@ -26,7 +26,9 @@ export class PocetnaStranaComponent implements OnInit {
     this.oglasiService.getAllAds().subscribe(response => {
       console.log("Response received");
       this.ads = response;
+      this.allAds = JSON.parse(JSON.stringify(this.ads));
       console.log(this.ads);
+      console.log(this.allAds);
     },
     error =>{
       console.error(error);

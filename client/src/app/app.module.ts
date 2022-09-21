@@ -13,6 +13,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ZakazivanjeComponent } from './zakazivanje/zakazivanje.component';
 import { FormsModule } from '@angular/forms';
+import { RegistrationComponent } from './registration/registration.component';
+import { ChangePasswordComponent } from './change-password/change-password.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -21,7 +23,9 @@ import { FormsModule } from '@angular/forms';
     MojiOglasiComponent,
     OmiljeniComponent,
     PocetnaStranaComponent,
-    ZakazivanjeComponent
+    ZakazivanjeComponent,
+    RegistrationComponent,
+    ChangePasswordComponent
   ],
   imports: [
     BrowserModule,
