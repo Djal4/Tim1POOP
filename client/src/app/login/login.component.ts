@@ -55,6 +55,7 @@ export class LoginComponent implements OnInit {
     this.http.post('http://localhost:8080/api/auth/login',JSON.stringify(this.contactForm.value),{headers:{"Content-Type":"application/json"},observe:"response"}).subscribe((res) =>{
       this.valid = 1;
       localStorage.setItem("token",JSON.parse(JSON.stringify(res.body)).token);
+      this.loginService.token=localStorage.getItem("token");
       setTimeout(()=>{
         this.router.navigate(["/"]);
       },1000);

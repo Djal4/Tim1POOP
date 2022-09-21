@@ -42,7 +42,7 @@ export class MojiOglasiComponent implements OnInit {
   myAds:Ad[];
   noviOglas:Ad;
   selectedOglas:Ad;
-  kategorije:AdCategory[] | null | undefined;
+  kategorije:AdCategory[] | any[] | null;
   drzave:Country[] | null;
   gradovi:City[] | undefined;
   closeResult = '';
@@ -122,13 +122,14 @@ export class MojiOglasiComponent implements OnInit {
   otvoriEdit(id:number,content2:any){
     
     this.oglasiService.getAdById(id).subscribe((response:any) => {
-      console.log("Response received");
       this.selectedOglas = response;
-      // let index =this.kategorije?.findIndex(value =>
-      //   value.title == response.adCategory);
-      // this.selectedOglas.adCategoryId = this.kategorije?[index].id; 
-      console.log("SELECTED OGLAS");
-      console.log(this.selectedOglas);
+      let adCategory =this.kategorije?.find(value =>
+      value.title == response.adCategory);
+      let city=this.gradovi?.find(value=>value.name==response.city)
+      this.selectedOglas.adCategoryId =(adCategory !==null && adCategory!==undefined)? adCategory.id : 0; 
+      this.selectedOglas.cityId =(city !==null && city!==undefined)? city.id : 0;
+      this.selectedOglas.city=city?.name;
+      this.selectedOglas.adCategory=adCategory.title;
       this.open2(content2);
 
     },
@@ -161,10 +162,8 @@ export class MojiOglasiComponent implements OnInit {
   }
 
   updateOglas():void{
-    console.log("NOVI OGLAS");
-    console.log(this.selectedOglas);
+    console.log("Update OGLAS");
     this.http.patch<Ad>('http://localhost:8080/api/ads/'+this.selectedOglas.id,this.selectedOglas,{ headers: { "Authorization": "Bearer " + localStorage.getItem("token") } }).subscribe((res) =>{
-        console.log(res);
     },
     (error)=>{
       console.log("error caught in component");

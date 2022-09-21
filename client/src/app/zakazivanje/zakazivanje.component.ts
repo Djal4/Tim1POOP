@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { throwMatDuplicatedDrawerError } from '@angular/material/sidenav';
 import { Router } from '@angular/router';
+import { LoginService } from '../services/login.service';
 
 @Component({
   selector: 'app-zakazivanje',
@@ -9,7 +10,7 @@ import { Router } from '@angular/router';
 })
 export class ZakazivanjeComponent implements OnInit {
 
-  constructor(private router: Router) { }
+  constructor(private router: Router,public loginService:LoginService) { }
   owner: boolean;
   baseUrl: string;
   requestedSightseeings: any[];
@@ -74,6 +75,7 @@ export class ZakazivanjeComponent implements OnInit {
   failedAuth(response: any) {
     if (response.status === 401) {
       localStorage.removeItem("token");
+      this.loginService.token=null;
       this.router.navigate(["/"]);
     }
   }

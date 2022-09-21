@@ -10,7 +10,7 @@ import { map } from 'rxjs';
 })
 export class LoginService {
 
-  t = localStorage.getItem("accessToken");
+  token = localStorage.getItem("token");
 
 
   headers = new HttpHeaders({

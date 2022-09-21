@@ -7,6 +7,8 @@ export class Ad {
     adCategoryId?: number;
     owner: User;
     cityId: number;
+    city?:string;
+    adCategory?:string;
     country:string;
     area: number;
     price: number;
