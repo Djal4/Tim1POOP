@@ -15,6 +15,9 @@ import { ZakazivanjeComponent } from './zakazivanje/zakazivanje.component';
 import { FormsModule } from '@angular/forms';
 import { RegistrationComponent } from './registration/registration.component';
 import { ChangePasswordComponent } from './change-password/change-password.component';
+import { AdDetailsComponent } from './ad-details/ad-details.component';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
 @NgModule({
   declarations: [
     AppComponent,
@@ -25,7 +28,8 @@ import { ChangePasswordComponent } from './change-password/change-password.compo
     PocetnaStranaComponent,
     ZakazivanjeComponent,
     RegistrationComponent,
-    ChangePasswordComponent
+    ChangePasswordComponent,
+    AdDetailsComponent
   ],
   imports: [
     BrowserModule,
@@ -34,7 +38,9 @@ import { ChangePasswordComponent } from './change-password/change-password.compo
     AngularMaterialModule,
     HttpClientModule,
     ReactiveFormsModule,
-    FormsModule
+    FormsModule,
+    MatDatepickerModule,
+    MatNativeDateModule
   ],
   bootstrap: [AppComponent]
 })

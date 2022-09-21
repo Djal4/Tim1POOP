@@ -1,1 +1,57 @@
-<p>ad-details works!</p>
+
+  
+
+<div class="ad-container">
+    <form id="zakazi_razgledanje">
+    <input type="date" name="date" [(ngModel)]="date">
+    <input type="time" name="time" pattern="[0-9]{2}:[0-9]{2}" [(ngModel)]="time">
+    <button (click)="zatraziZakazivanje($event)" (keydown)="preventDefault($event)" class="btn btn-primary">Submit</button>
+    </form>
+<div class="ad">
+      <div class="header">
+          <h1>{{selectedAdDetail.adCategory}}-</h1>
+          <h1 class="price">{{selectedAdDetail.price}}€</h1>
+          <h1 class="area">Povrsina: {{selectedAdDetail.area}}km2</h1>
+      </div>
+      <main>
+        <hr>
+        <p class="desc">{{selectedAdDetail.description}}<p>
+        <hr>
+      </main>
+      <footer>
+          <p class="city">
+              {{selectedAdDetail.city}}
+          </p>
+          <h2 style="font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif; font-weight: bold;">Luka Jankovic</h2>
+        </footer>
+  </div>
+</div>
+
+<div class="container d-flex justify-content-center mt-100 mb-100">
+    <div class="row">
+        <div class="col-md-12">
+  
+          <div class="card">
+                              <div class="card-body">
+                                  <h3 class="card-title">Komentari</h3>
+                                  </div>
+  
+                              <div class="comment-widgets m-b-20">
+  
+                                  <div *ngFor="let komentar of komentari" class="d-flex flex-row comment-row">
+                                      <div class="comment-text w-100">
+                                          <h5>{{komentar.user.name}}</h5>
+                                          <div class="comment-footer">
+                                                      <a href="#" data-abc="true"><i class="fa fa-pencil"></i></a>
+                                                      <a href="#" data-abc="true"><i class="fa fa-rotate-right"></i></a>
+                                                      <a href="#" data-abc="true"><i class="fa fa-heart"></i></a>
+                                          </div>
+                                          <p class="m-b-5 m-t-10">{{komentar.comment}}</p>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+  
+        </div>
+    </div>
+  </div>

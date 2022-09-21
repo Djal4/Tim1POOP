@@ -16,16 +16,22 @@
 }
 
 #pocetnaNaslov1{
-  font-weight: bold;
-    font-size: 30px;
-    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-    color: rgb(31, 12, 12);
+  text-align:center; 
+  font-size:75px; 
+  text-transform:uppercase; 
+  color:#222; 
+  letter-spacing:1px;
+  font-family:"Playfair Display", serif; 
+  font-weight:bold;
 }
 
+
 .pocetnaNaslov2{
-    font-size: 25px;
+    font-size: 35px;
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-    color: rgb(29, 10, 10);
+    color: rgb(40, 50, 54);
+    font-weight: 900;
+    line-height: 0.8;
 }
 
 .header{
@@ -123,8 +129,18 @@ body {
   }
 
   .carousel-caption {
-    bottom: 3rem;
+    bottom: 19rem;
     z-index: 10;
+  }
+
+  .nine h1 {
+    text-align:center; 
+    font-size:50px; 
+    text-transform:uppercase; 
+    color:#222; 
+    letter-spacing:1px;
+    font-family:"Playfair Display", serif; 
+    font-weight:400;
   }
   
   .carousel-item {

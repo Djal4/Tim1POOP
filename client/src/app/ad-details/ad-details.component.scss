@@ -1,0 +1,231 @@
+#pocetnaBaner{
+    display: flex;
+    justify-content: center;
+  }
+  #slika{
+    width: 65%;
+    height: 500px;
+  
+  }
+  #opis{
+    width: 100%;
+    height: 100px;
+    display: flex;
+    justify-content: center;
+  
+  }
+  
+  #pocetnaNaslov1{
+    text-align:center; 
+    font-size:75px; 
+    text-transform:uppercase; 
+    color:#222; 
+    letter-spacing:1px;
+    font-family:"Playfair Display", serif; 
+    font-weight:bold;
+  }
+  
+  
+  .pocetnaNaslov2{
+      font-size: 35px;
+      font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+      color: rgb(40, 50, 54);
+      font-weight: 900;
+      line-height: 0.8;
+  }
+  
+  .header{
+      width: 100%;
+      height: 80px;
+      display: flex;
+  }
+  
+  .desc{
+      font-size: 15px;
+      text-indent: 1cm;
+      line-height: 1.6;
+  }
+  
+  .area{
+      margin-left: 850px;
+  }
+  
+  h1 { color: #111;
+    font-family: 'Helvetica Neue',sans-serif;
+    font-size: 25px;
+    font-weight: bold;
+    letter-spacing: -1px;
+    line-height: 1;
+    text-align: center;
+    margin-top: 15px;
+     }
+  
+     .price{
+      float: right;
+     }
+  
+     .ad-container{
+      margin-top: 50px;
+      width: 100%;
+      margin-left: 17%;
+  }
+  
+  .city{
+      padding: 5px;
+      background-color: rgb(212, 186, 186);
+      border: 2px solid rgb(2, 213, 228);
+      font-size: 20px;
+      font-weight: bold;
+      font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+      border-radius: 5px;
+  }
+  
+  .btn btn-info{
+      margin-left: 800px;
+  }
+  
+  .ad{
+      
+      margin-top: 50px;
+      border-radius: 5px;
+      border: 1px solid black;
+      min-width: 280px;
+      width: 90%;
+      max-width: 1200px;
+      padding: 10px;
+  }
+  .ad > header,.ad > footer{
+      display: flex;
+      gap:15px;
+  }
+  .ad > main{
+      flex-grow: 1;
+  }
+  .ad-price{
+      background-color: green;
+  }
+  
+  
+  .comment{
+      display: flex;
+      flex-direction: column;
+      border: 1px solid red;
+      border-radius: 10px;
+      padding: 10px;
+  }
+  .comment > header{
+      display: flex;
+      gap:10px;
+  }
+  
+  body {
+      padding-top: 3rem;
+      padding-bottom: 3rem;
+      color: #5a5a5a;
+    }
+    
+    .carousel {
+      margin-bottom: 4rem;
+    }
+  
+    .carousel-caption {
+      bottom: 19rem;
+      z-index: 10;
+    }
+  
+    .nine h1 {
+      text-align:center; 
+      font-size:50px; 
+      text-transform:uppercase; 
+      color:#222; 
+      letter-spacing:1px;
+      font-family:"Playfair Display", serif; 
+      font-weight:400;
+    }
+    
+    .carousel-item {
+      height: 32rem;
+      background-color: rgb(255, 255, 255);
+    }
+    .carousel-item > img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      min-width: 100%;
+      height: 32rem;
+    }
+  
+    .card-no-border .card {
+      border: 0px;
+      border-radius: 4px;
+      -webkit-box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.05);
+      box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.05)
+  }
+  
+  .card-body {
+      -ms-flex: 1 1 auto;
+      flex: 1 1 auto;
+      padding: 1.25rem
+  }
+  
+  .comment-widgets .comment-row:hover {
+      background: rgba(0, 0, 0, 0.02);
+      cursor: pointer;
+  }
+  
+  .comment-widgets .comment-row {
+      border-bottom: 1px solid rgba(120, 130, 140, 0.13);
+      padding: 15px;
+  }
+  .comment-text:hover{
+      visibility: hidden;
+  }
+  .comment-text:hover{
+      visibility: visible;
+  }
+  
+  .label {
+      padding: 3px 10px;
+      line-height: 13px;
+      color: #ffffff;
+      font-weight: 400;
+      border-radius: 4px;
+      font-size: 75%;
+  }
+  
+  .round img {
+      border-radius: 100%;
+  }
+  
+  .label-info {
+      background-color: #1976d2;
+  }
+  
+  .label-success {
+      background-color: green;
+  }
+  
+  .label-danger {
+      background-color: #ef5350;
+  }
+  
+  .action-icons a {
+      padding-left: 7px;
+      vertical-align: middle;
+      color: #99abb4;
+  }
+  
+  .action-icons a:hover {
+      color: #1976d2;
+  }
+  
+  .mt-100 {
+      margin-top: 100px
+  }
+  
+  .mb-100 {
+      margin-bottom: 100px
+  }
+    
+    
+  

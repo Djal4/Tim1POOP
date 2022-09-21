@@ -1,13 +1,56 @@
 <div class="sightseeing-container">
     <div class="navigation">
         <p (click)="setOwner($event)" class="active-tab">
-            Sightseeings for my advertisments
+            Primljeni zahtevi za razgledanje
         </p>
-        <p (click)="setUser($event)">Requested sightseeings</p>
+        <p (click)="setUser($event)">Poslati zahtevi za razgledanje</p>
     </div>
 
-    <div class="my-sightseeings" *ngFor="let sight of ownerSightseeings">
-        <div class="sightseeing">
+    <div class="my-sightseeings" *ngFor="let sight of requestedSightseeings">
+        <div class="card text-center">
+            <div class="card-header">{{ getStatus(sight) }}</div>
+            <div class="card-body">
+              <h3 class="card-title"><a [routerLink]="['/ad-details/' + sight.ad.id]">Link do oglasa </a></h3>
+              <p class="card-text">Korisnicko ime: {{ sight.user.username }}<br>
+                Ime: {{ sight.user.name }}</p>
+                <div class="card-body" *ngIf="sight.mark > 0">
+                    Mark: {{ sight.mark }}<br />
+                    Comment: {{ sight.comment }}
+                </div>
+                <div *ngIf="owner; else elseUser">
+                    <div *ngIf="sight.accepted === null">
+                        <div class="accept-or-reject">
+                            <button (click)="acceptOrReject(sight, true)" type="button" class="btn btn-success">Prihvati</button>
+                            <button type="button" (click)="acceptOrReject(sight, false)" class="btn btn-danger">Odbij</button>
+                        </div>
+                    </div>
+                </div>
+                <ng-template #elseUser>
+                    <div *ngIf="sight.mark == 0 && sight.accepted === true">
+                        <form id="mark-form">
+                            <div class="mark-input">
+                            <label>Mark:&nbsp;&nbsp;</label><select class="form-select" aria-label="Default select example" name="mark">
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5</option>
+                            </select>
+                            </div>
+                            <div class="comment-input">
+                            <label>Comment:</label>
+                            <textarea name="comment"></textarea>
+                            </div>
+                            <button type="button" class="btn btn-primary" (click)="markAndComment($event,sight)" (keydown)="preventDefault($event)">Submit</button>
+                        </form>
+                    </div>
+                </ng-template>
+            </div>
+           
+            <div class="card-footer text-muted">Vreme:{{ sight.time }}</div>
+          </div>
+
+        <!-- <div class="sightseeing">
             <div class="sightseeing-header">
                 <div [classList]="['status', getStatus(sight).toLowerCase()]">
                     {{ getStatus(sight) }}
@@ -29,18 +72,14 @@
             <div *ngIf="owner; else elseUser">
                 <div *ngIf="sight.accepted === null">
                     <div class="accept-or-reject">
-                        <button
-                            (click)="acceptOrReject(sight, true)"
-                            class="accept-button"
-                        >
-                            Accept
-                        </button>
-                        <button
+                        <button (click)="acceptOrReject(sight, true)" type="button" class="btn btn-success">Prihvati</button> -->
+                        <!-- <button
                             (click)="acceptOrReject(sight, false)"
                             class="reject-button"
                         >
                             Reject
-                        </button>
+                        </button> -->
+                        <!-- <button type="button" (click)="acceptOrReject(sight, false)" class="btn btn-danger">Odbij</button>
                     </div>
                 </div>
             </div>
@@ -64,6 +103,6 @@
                     </form>
                 </div>
             </ng-template>
-        </div>
+        </div> -->
     </div>
 </div>
