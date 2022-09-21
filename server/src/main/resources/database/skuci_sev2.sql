@@ -1,15 +1,16 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.0
+-- version 5.1.0
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost
--- Generation Time: Sep 14, 2022 at 04:26 PM
--- Server version: 10.4.24-MariaDB
--- PHP Version: 8.1.6
+-- Host: 127.0.0.1
+-- Generation Time: Sep 21, 2022 at 09:36 AM
+-- Server version: 10.4.18-MariaDB
+-- PHP Version: 8.0.3
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
+SET GLOBAL FOREIGN_KEY_CHECKS=0;
 
 CREATE DATABASE IF NOT EXISTS skuci_se;
 
@@ -28,7 +29,7 @@ DELIMITER $$
 --
 -- Procedures
 --
-CREATE DEFINER=`root`@`localhost` PROCEDURE `averageMark` (IN `AD_ID` INT)   BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `averageMark` (IN `AD_ID` INT)  BEGIN
 	SELECT CASE 
     	WHEN AVG(1.0*s.mark) IS NULL THEN 0
         ELSE AVG(1.0*s.mark)
@@ -37,37 +38,37 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `averageMark` (IN `AD_ID` INT)   BEG
     WHERE s.advertisment_id=AD_ID AND s.accepted=1 AND s.mark>0;
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `findMarkedSightseeingByAdId` (IN `AD_ID` INT)   BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `findMarkedSightseeingByAdId` (IN `AD_ID` INT)  BEGIN
 	SELECT * FROM sightseeing s
     WHERE s.accepted=1 AND s.advertisment_id=AD_ID AND s.mark>0;
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `findMyAds` (IN `ID` INT)   BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `findMyAds` (IN `ID` INT)  BEGIN
 	SET @id=ID;
 	SELECT * FROM advertisments ad WHERE ad.owner_id=@id; 
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `findOtherAds` (IN `ID` INT)   BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `findOtherAds` (IN `ID` INT)  BEGIN
 	SET @id=ID;
 	SELECT * FROM advertisments ad WHERE ad.owner_id != @id; 
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `findSightseeingByOwnerId` (IN `id` INT)   BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `findSightseeingByOwnerId` (IN `id` INT)  BEGIN
 SELECT * FROM sightseeing s WHERE EXISTS
 (
     SELECT * FROM advertisments a WHERE s.advertisment_id=a.id AND a.owner_id = id
 );
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `findSightseeingByUserId` (IN `id` INT)   BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `findSightseeingByUserId` (IN `id` INT)  BEGIN
 SELECT * FROM sightseeing s WHERE s.user_id = id;
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `numberOfLikes` (IN `AD_ID` INT)   BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `numberOfLikes` (IN `AD_ID` INT)  BEGIN
 	SELECT COUNT(*) as numberOfLikes FROM likes WHERE advertisment_id=AD_ID;
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `toogleLike` (IN `AD_ID` INT, IN `USER_ID` INT)   BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `toogleLike` (IN `AD_ID` INT, IN `USER_ID` INT)  BEGIN
 	/*DECLARE @adId INT;
     DECLARE @userId INT;*/
 	SET @adId=AD_ID;
@@ -82,7 +83,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `toogleLike` (IN `AD_ID` INT, IN `US
     END IF;
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `userLikedAd` (IN `AD_ID` INT, IN `USER_ID` INT)   BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `userLikedAd` (IN `AD_ID` INT, IN `USER_ID` INT)  BEGIN
 	SELECT COUNT(*) as liked FROM likes l WHERE l.user_id=USER_ID AND l.advertisment_id=AD_ID;
 END$$
 
@@ -216,6 +217,17 @@ INSERT INTO `hibernate_sequence` (`next_val`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `images`
+--
+
+CREATE TABLE `images` (
+  `id` int(11) NOT NULL,
+  `image` mediumtext COLLATE utf8_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `likes`
 --
 
@@ -276,11 +288,6 @@ INSERT INTO `sightseeing` (`id`, `user_id`, `advertisment_id`, `accepted`, `time
 (13, 2, 4, 0, '2026-08-18 10:15:16', 0, NULL),
 (14, 2, 4, 1, '2026-08-18 10:15:16', 4, 'aa');
 
-CREATE TABLE `images`(
-  `id` int(11) NOT NULL,
-  `picture` varchar(65535) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
 -- --------------------------------------------------------
 
 --
@@ -291,7 +298,7 @@ CREATE TABLE `users` (
   `id` int(11) NOT NULL,
   `firstname` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
   `lastname` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
-  `image_id` int(11) NOT NULL,
+  `image_id` int(11),
   `role_id` int(11) NOT NULL,
   `username` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
   `password` varchar(100) COLLATE utf8_unicode_ci NOT NULL
@@ -302,15 +309,12 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `firstname`, `lastname`, `image_id`, `role_id`, `username`, `password`) VALUES
-(1, 'Ime', 'Prezime', 1,  1, 'user', '$2a$10$pTme2grcKbjhySjxx.24z.OJ2wwDSYuyj/WuaYofD3GVQaNRg9w.S'),
-(2, 'Korisnik', 'Korisnik', 2,  2, 'korisnik', '$2a$10$zlBFTWQtI7PwoUOOjQLbQu6v49caK2bipyONl5RT5bokqj1ejuk7u');
+(1, 'Ime', 'Prezime', 1, 1, 'user', '$2a$10$pTme2grcKbjhySjxx.24z.OJ2wwDSYuyj/WuaYofD3GVQaNRg9w.S'),
+(2, 'Korisnik', 'Korisnik', 2, 2, 'korisnik', '$2a$10$zlBFTWQtI7PwoUOOjQLbQu6v49caK2bipyONl5RT5bokqj1ejuk7u');
 
 --
 -- Indexes for dumped tables
 --
-
-ALTER TABLE `images`
-  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `advertisments`
@@ -341,6 +345,12 @@ ALTER TABLE `countries`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `images`
+--
+ALTER TABLE `images`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `likes`
 --
 ALTER TABLE `likes`
@@ -368,7 +378,7 @@ ALTER TABLE `users`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `username` (`username`),
   ADD KEY `fk_role` (`role_id`),
-  ADD KEY `fk_image` (`image_id`); 
+  ADD KEY `fk_image` (`image_id`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -451,8 +461,13 @@ ALTER TABLE `sightseeing`
 --
 -- Constraints for table `users`
 --
+--
+-- Constraints for table `images`
+--
+
 ALTER TABLE `users`
-  ADD CONSTRAINT `fk_role` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`) ON UPDATE NO ACTION;
+  ADD CONSTRAINT `fk_role` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`) ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_image` FOREIGN KEY (`image_id`) REFERENCES `images` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

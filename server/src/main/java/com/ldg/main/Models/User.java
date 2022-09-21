@@ -28,24 +28,17 @@ public class User {
     @Column(name = "role_id")
     private long role_id = 0;
 
-    @Column(name = "image_path")
-    private String path = "";
-
-    // @Column(name = "email")
-    // private String email;
-
     public User() {
 
     }
 
-    public User(long ID, long pictureID, String firstname, String lastname, int role_id, String path, String password,
+    public User(long ID, long pictureID, String firstname, String lastname, int role_id, String password,
             String username) {
         this.ID = ID;
         this.pictureID = pictureID;
         this.firstname = firstname;
         this.lastname = lastname;
         this.role_id = role_id;
-        this.path = path;
         this.password = password;
         this.username = username;
     }
@@ -88,14 +81,6 @@ public class User {
 
     public long getRoleID() {
         return this.role_id;
-    }
-
-    public void setPath(String path) {
-        this.path = path;
-    }
-
-    public String getPath() {
-        return this.path;
     }
 
     public String getPassword() {
