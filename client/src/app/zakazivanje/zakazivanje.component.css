@@ -11,7 +11,9 @@
     display: flex;
     gap: 20px;
 }
-
+.sightseeing-container > .mysightseeing:last-of-type{
+    margin-bottom: 50px;
+}
 .active-tab {
     border-bottom: 5px solid #e3f2fd;
 }
