@@ -59,6 +59,7 @@ export class AdDetailsComponent implements OnInit {
       console.log(res);
   },
   (error)=>{
+    alert("Greska u odabiru datuma ili vremena!");
     console.log("error caught in component");
     console.error(error);
     
