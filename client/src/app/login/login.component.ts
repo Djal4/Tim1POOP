@@ -17,6 +17,7 @@ export class LoginComponent implements OnInit {
   @Input()
   token: string | null;
   contactForm;
+  valid:number;
   username = new FormControl('', [
     Validators.required,
     Validators.minLength(4)
@@ -40,6 +41,8 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  
+
   get firstname() {
     return this.contactForm.get('firstname');
   }
@@ -49,9 +52,21 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit() {
-    this.loginService.GetLogin(this.contactForm.value);
+    this.http.post('http://localhost:8080/api/auth/login',JSON.stringify(this.contactForm.value),{headers:{"Content-Type":"application/json"},observe:"response"}).subscribe((res) =>{
+      this.valid = 1;
+      localStorage.setItem("token",JSON.parse(JSON.stringify(res.body)).token);
+      setTimeout(()=>{
+        this.router.navigate(["/"]);
+      },1000);
+  },
+  (error)=>{
+    this.valid = 0;
+    console.log("error caught in component");
+    console.error(error);
+    console.log(this.valid);
+    
+  })
     this.token = localStorage.getItem("token");
-    this.router.navigate(["/"]);
   }
 
   validiraj(): void {

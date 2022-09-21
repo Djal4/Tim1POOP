@@ -12,7 +12,7 @@ import { AngularMaterialModule } from './angular-material.module';
 import { HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ZakazivanjeComponent } from './zakazivanje/zakazivanje.component';
-
+import { FormsModule } from '@angular/forms';
 @NgModule({
   declarations: [
     AppComponent,
@@ -29,7 +29,8 @@ import { ZakazivanjeComponent } from './zakazivanje/zakazivanje.component';
     BrowserAnimationsModule,
     AngularMaterialModule,
     HttpClientModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    FormsModule
   ],
   bootstrap: [AppComponent]
 })

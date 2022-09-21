@@ -1,14 +1,28 @@
-<div id="opis">
+<!-- <div id="opis">
   <h1>skuciSe-Online rezervacija smestaja u Srbiji bez troskova</h1>
-</div>
- <div id="pocetnaBaner">
+</div> -->
+ <!-- <div id="pocetnaBaner">
   <img src='assets/slike/tradewar3-23.jpg' id="slika">
+ </div> -->
+ <div id="myCarousel" class="carousel slide" data-ride="carousel">
+  
+  <div class="carousel-inner">
+    <div class="carousel-item active">
+      <img class="first-slide" src='assets/slike/tradewar3-23.jpg' alt="First slide">
+      <div class="container">
+        <div class="carousel-caption text-left">
+          <h1 id="pocetnaNaslov1">SkuciSe</h1>
+          <p class="pocetnaNaslov2">Online rezervacija smestaja u Srbiji</p>
+          <p class="pocetnaNaslov2">Za svakog po nesto.Najpovoljnije cene i najbolja usluga</p>
+        </div>
+      </div>
+    </div>
+  </div>
  </div>
-
  <div class="ad-container">
   <div *ngFor="let ad of ads" class="ad">
       <div class="header">
-          <h1>{{ad.adCategory}}</h1>
+          <h1>{{ad.adCategoryId}}-</h1>
           <h1 class="price">{{ad.price}}€</h1>
           <h1 class="area">Povrsina: {{ad.area}}km2</h1>
       </div>
@@ -21,7 +35,7 @@
       </main>
       <footer>
           <p class="city">
-              {{ad.city}}
+              {{ad.cityId}}
           </p>
           <h2 style="font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif; font-weight: bold;">Luka Jankovic</h2>
           <button type="button" class="btn btn-info" style="margin-bottom: 10px; margin-left:750px;" (click)="showDetails(ad.id)">Prikazi detalje</button>

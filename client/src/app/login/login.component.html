@@ -1,7 +1,15 @@
+
+
 <section class="vh-100" style="background-color: #d0e4f7;">
   <div class="container py-5 h-100">
     <div class="row d-flex justify-content-center align-items-center h-100">
       <div class="col col-xl-10">
+        <div *ngIf="valid == 1" class="alert alert-success alert-dismissible fade show" role="alert">
+          <strong>Uspesna prijava!</strong>
+          </div>
+        <div *ngIf="valid == 0" class="alert alert-danger alert-dismissible fade show" role="alert">
+        <strong>Greska u prijavi!</strong> Korisnicko ime ili lozinka nisu tacni.
+        </div>
         <div class="card" style="border-radius: 1rem;">
           <div class="row g-0">
             <div class="col-md-6 col-lg-5 d-none d-md-block">
@@ -22,7 +30,7 @@
 
                   <div class="form-outline mb-4">
                     <input type="text" id="username" name="username" [formControl]="username" class="form-control form-control-lg" />
-                    <label class="form-label" for="form2Example17">Email adresa</label>
+                    <label class="form-label" for="form2Example17">Korisnicko ime</label>
                     <div style="color: red;" [hidden]="!username.hasError('minlength')">
                       Korisnicko ime mora sadrzati minimum 4 karaktera.
                     </div>

@@ -4,9 +4,9 @@ import { User } from "./user";
 export class Ad {
 
     id: number;
-    adCategory: string;
+    adCategoryId: number;
     owner: User;
-    city: string;
+    cityId: number;
     country:string;
     area: number;
     price: number;

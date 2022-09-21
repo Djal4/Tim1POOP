@@ -2,6 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Ad } from '../modeli/ad';
 import { OglasiService } from '../services/oglasi.service';
+import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
+import { FormsModule } from '@angular/forms';
+import { AdCategory } from '../modeli/adCategory';
+import { HttpClient } from '@angular/common/http';
+import { Country } from '../modeli/country';
+import { City } from '../modeli/city';
 export interface PeriodicElement {
   name: string;
   position: number;
@@ -34,24 +40,89 @@ export class MojiOglasiComponent implements OnInit {
   displayedColumns: string[] = ['Kategorija', 'Grad', 'Drzava', 'Kvadratura', 'Cena', 'Uredi', 'Obrisi'];
   dataSource = ELEMENT_DATA;
   myAds:Ad[];
+  noviOglas:Ad;
+  kategorije:AdCategory[] | null;
+  drzave:Country[] | null;
+  gradovi:City[] | undefined;
+  closeResult = '';
   constructor(private router:Router,
-              private oglasiService:OglasiService) { }
-
-  valid:number = 0;
+              private oglasiService:OglasiService,
+              private modalService: NgbModal,
+              private http:HttpClient) { }
+  valid:number;
   ngOnInit(): void {
-    
-    this.oglasiService.getMyAds().subscribe(response => {
+      this.noviOglas = new Ad;
+      console.log("novi oglas kreiran");
+      console.log(this.noviOglas);
+      this.oglasiService.getMyAds().subscribe(response => {
       console.log("Response received");
       this.myAds = response;
+      console.log("MOJI OGLASI");
       console.log(this.myAds);
       this.valid = 1;
     },
     error =>{
-      alert("Morate se ulogovati!");
-      this.router.navigate(["/login"]);
+      this.valid = 0;
+    })
+    this.http.get<AdCategory[]>('http://localhost:8080/api/ad_category',{observe:"response"}).subscribe((res) =>{
+        this.kategorije = res.body;
+        console.log("KATEGORIJE");
+        console.log(this.kategorije);
+    },
+    (error)=>{
+      console.log("error caught in component");
+      console.error(error);
+      
     })
 
+    this.http.get<Country[]>('http://localhost:8080/api/country',{observe:"response"}).subscribe((res) =>{
+      this.drzave = res.body;
+      console.log("DRZAVE");
+      console.log(this.drzave);
+      this.drzave?.forEach(element => {
+          this.gradovi = element.cities;
+      });
+    },
+    (error)=>{
+    console.log("error caught in component");
+    console.error(error);
+    })
 
+      
+}
+
+  goToLogIn():void{
+      this.router.navigate(["/login"]);
+  }
+
+  open(content:any) {
+    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+
+  private getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
+  }
+
+  kreirajNoviOglas():void{
+    console.log(this.noviOglas);
+    this.http.post<Ad>('http://localhost:8080/api/ads',this.noviOglas,{ headers: { "Authorization": "Bearer " + localStorage.getItem("token") } }).subscribe((res) =>{
+        console.log(res);
+    },
+    (error)=>{
+      console.log("error caught in component");
+      console.error(error);
+      
+    })
   }
 
 }

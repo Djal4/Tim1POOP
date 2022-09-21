@@ -17,18 +17,6 @@ export class LoginService {
     "Authorization":"Bearer-token"
   })
   constructor(private http:HttpClient) { }
-
-
-  GetLogin(object:Object) {
-    this.http.post('http://localhost:8080/api/auth/login',JSON.stringify(object),{headers:{"Content-Type":"application/json"},observe:"response"})
-      .subscribe((res) =>{
-          localStorage.setItem("token",JSON.parse(JSON.stringify(res.body)).token);
-      },
-      (error)=>{
-        console.log("error caught in component");
-        console.error(error);
-      })
-    }
     
 
   }

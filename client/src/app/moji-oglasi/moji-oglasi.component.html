@@ -1,7 +1,69 @@
+
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h2 class="modal-title" id="modal-basic-title">Novi oglas</h2>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+  </div>
+  <div class="modal-body">
+    <form>
+      <div class="mb-3">
+        <label for="dateOfBirth">Kategorija</label>
+        <div class="input-group">
+          <select class="form-control" name="adCategory" [(ngModel)]="noviOglas.adCategoryId"> 
+            <option *ngFor="let kategorija of kategorije" [value]="kategorija.id">{{kategorija.title}}</option> 
+        </select> 
+        </div>
+      </div>
+      <div class="mb-3">
+        <label for="dateOfBirth">Kvadratura</label>
+        <div class="input-group">
+          <input id="area" class="form-control" [(ngModel)]="noviOglas.area"  placeholder="Kvadratura" name="area" type="number">
+        </div>
+      </div>
+      <div class="mb-3">
+        <label for="dateOfBirth">Cena</label>
+        <div class="input-group">
+          <input id="price" class="form-control" [(ngModel)]="noviOglas.price"  placeholder="Cena" name="price" type="number">
+        </div>
+      </div>
+      <div class="mb-3">
+        <label for="dateOfBirth">Grad</label>
+        <div class="input-group">
+          <select class="form-control" name="city" [(ngModel)]="noviOglas.cityId"> 
+            <option *ngFor="let grad of gradovi" [value]="grad.id">{{grad.name}}</option> 
+        </select> 
+        </div>
+      </div>
+      <div class="mb-3">
+        <label for="dateOfBirth">Opis</label>
+        <div class="input-group">
+          <input id="opis" class="form-control" [(ngModel)]="noviOglas.description" placeholder="Opis" name="opis" type="text">
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click');kreirajNoviOglas();">Save</button>
+  </div>
+</ng-template>
+
+<div *ngIf="valid == 0" classs="container p-5">
+	<div class="row no-gutters">
+		<div class="col-lg-6 col-md-12 m-auto">
+			<div id="alert" class="alert alert-danger fade show" role="alert">
+			 	<h4 class="alert-heading">Greska!</h4>
+			  	<p>Morate biti ulogovani da biste pristupili ovoj stranici.</p>
+          <button type="button" class="btn btn-primary" (click)="goToLogIn()">Log in</button>
+    			</div>
+		</div>
+	</div>
+</div>
+
 <div *ngIf="valid !=0">
-
-
-
+<header>
+    <h1>MOJI OGLASI</h1>
+    <button id="dugme1" type="button"  (click)="open(content)" class="btn btn-primary btn-lg">Napravi novi oglas</button>
+</header>
 <table mat-table [dataSource]="myAds" class="mat-elevation-z8">
     
     <ng-container matColumnDef="Kategorija">

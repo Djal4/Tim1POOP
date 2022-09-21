@@ -1,5 +1,5 @@
 
 export class AdCategory{
-    id: Number;
-    title: String;
+    id: number;
+    title: string;
 }
