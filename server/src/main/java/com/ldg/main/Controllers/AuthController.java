@@ -66,23 +66,29 @@ public class AuthController {
     }
 
     @PutMapping("/change/password")
-    public boolean changePassword(@RequestBody @Valid ChangePasswordRequest request)
-    {
-        Authentication auth=SecurityContextHolder.getContext().getAuthentication();
-        if(policy.update(auth,userRepository.findById(((UserDetailsImpl) auth.getPrincipal()).getID()).get().getID()))
-        {
-            return userService.changePassword(userRepository.findById(((UserDetailsImpl) auth.getPrincipal()).getID()).get(),request);
+    public boolean changePassword(@RequestBody @Valid ChangePasswordRequest request) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (policy.update(auth,
+                userRepository.findById(((UserDetailsImpl) auth.getPrincipal()).getID()).get().getID())) {
+            return userService.changePassword(
+                    userRepository.findById(((UserDetailsImpl) auth.getPrincipal()).getID()).get(), request);
         }
         return false;
     }
 
     @PutMapping("/change/user/{ID}")
-    public User update(@PathVariable(value = "ID") Long ID,@RequestBody @Valid ChangeUserRequest request) {
-        Authentication auth=SecurityContextHolder.getContext().getAuthentication();
-        if(policy.update(auth,ID))
-        {
-            return userService.updateUser(ID,request);    
+    public User update(@PathVariable(value = "ID") Long ID, @RequestBody @Valid ChangeUserRequest request) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (policy.update(auth, ID)) {
+            return userService.updateUser(ID, request);
         }
         return null;
+    }
+
+    @PutMapping("/change/user")
+    public User updateMy(@RequestBody @Valid ChangeUserRequest request) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImpl user = (UserDetailsImpl) auth.getPrincipal();
+        return userService.updateUser(user.getID(), request);
     }
 }
